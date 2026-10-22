@@ -1,0 +1,5 @@
+{
+  "service": "ci-py",
+  "env": "prod",
+  "team": "platform"
+}

@@ -1,0 +1,34 @@
+2026-09-10T01:50:35.503008+00:00 cache-01 sshd[14]: Server listening on 0.0.0.0 port 22.
+2026-09-10T01:50:35.506896+00:00 cache-01 sshd[14]: Server listening on :: port 22.
+2026-09-10T07:50:22.595136+00:00 cache-01 sshd[464]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5  user=opuser
+2026-09-10T07:54:07.957872+00:00 cache-01 sshd[464]: Failed password for opuser from 172.18.0.5 port 39568 ssh2
+2026-09-10T07:54:32.304384+00:00 cache-01 sshd[464]: Connection closed by authenticating user opuser 172.18.0.5 port 39568 [preauth]
+2026-09-10T11:02:37.486464+00:00 cache-01 CRON[700]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory
+2026-09-10T11:02:37.516992+00:00 cache-01 CRON[700]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)
+2026-09-10T11:02:38.037408+00:00 cache-01 CRON[700]: pam_unix(cron:session): session closed for user root
+2026-09-10T13:51:20.691360+00:00 cache-01 sshd[908]: Accepted password for opuser from 172.18.0.5 port 35880 ssh2
+2026-09-10T13:51:20.807712+00:00 cache-01 sshd[908]: pam_unix(sshd:session): session opened for user opuser(uid=1000) by (uid=0)
+2026-09-10T13:51:21.071808+00:00 cache-01 sshd[908]: pam_env(sshd:session): deprecated reading of user environment enabled
+2026-09-10T13:51:21.073680+00:00 cache-01 sshd[908]: pam_env(sshd:session): Unable to open env file: /etc/default/locale: No such file or directory
+2026-09-10T13:51:27.447696+00:00 cache-01 sshd[914]: Received disconnect from 172.18.0.5 port 35880:11: disconnected by user
+2026-09-10T13:51:27.459360+00:00 cache-01 sshd[914]: Disconnected from user opuser 172.18.0.5 port 35880
+2026-09-10T13:51:27.491040+00:00 cache-01 sshd[908]: pam_unix(sshd:session): session closed for user opuser
+2026-09-11T00:14:35.886048+00:00 cache-01 sshd[15]: Server listening on 0.0.0.0 port 22.
+2026-09-11T00:14:35.891520+00:00 cache-01 sshd[15]: Server listening on :: port 22.
+2026-09-11T03:26:23.524224+00:00 cache-01 sshd[251]: Accepted password for opuser from 172.18.0.5 port 46414 ssh2
+2026-09-11T03:26:23.732160+00:00 cache-01 sshd[251]: pam_unix(sshd:session): session opened for user opuser(uid=1000) by (uid=0)
+2026-09-11T03:26:24.281088+00:00 cache-01 sshd[251]: pam_env(sshd:session): deprecated reading of user environment enabled
+2026-09-11T03:26:24.285120+00:00 cache-01 sshd[251]: pam_env(sshd:session): Unable to open env file: /etc/default/locale: No such file or directory
+2026-09-11T03:26:30.703776+00:00 cache-01 sshd[263]: Received disconnect from 172.18.0.5 port 46414:11: disconnected by user
+2026-09-11T03:26:30.714864+00:00 cache-01 sshd[263]: Disconnected from user opuser 172.18.0.5 port 46414
+2026-09-11T03:26:30.741648+00:00 cache-01 sshd[251]: pam_unix(sshd:session): session closed for user opuser
+2026-09-11T08:08:53.386224+00:00 cache-01 sshd[607]: Invalid user deploy from 172.18.0.5 port 44260
+2026-09-11T08:08:54.835296+00:00 cache-01 sshd[607]: pam_unix(sshd:auth): check pass; user unknown
+2026-09-11T08:08:54.837312+00:00 cache-01 sshd[607]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5 
+2026-09-11T08:13:46.697808+00:00 cache-01 sshd[607]: Failed password for invalid user deploy from 172.18.0.5 port 44260 ssh2
+2026-09-11T08:14:34.256400+00:00 cache-01 sshd[607]: Connection closed by invalid user deploy 172.18.0.5 port 44260 [preauth]
+2026-09-11T11:22:12.686880+00:00 cache-01 sshd[842]: Invalid user deploy from 172.18.0.5 port 52348
+2026-09-11T11:22:14.188080+00:00 cache-01 sshd[842]: pam_unix(sshd:auth): check pass; user unknown
+2026-09-11T11:22:14.192256+00:00 cache-01 sshd[842]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5 
+2026-09-11T11:25:47.951472+00:00 cache-01 sshd[842]: Failed password for invalid user deploy from 172.18.0.5 port 52348 ssh2
+2026-09-11T11:27:54.204048+00:00 cache-01 sshd[842]: Connection closed by invalid user deploy 172.18.0.5 port 52348 [preauth]

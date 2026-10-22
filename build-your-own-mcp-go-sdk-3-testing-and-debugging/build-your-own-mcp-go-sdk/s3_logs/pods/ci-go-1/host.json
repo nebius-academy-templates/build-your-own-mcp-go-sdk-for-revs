@@ -1,0 +1,5 @@
+{
+  "service": "ci-go",
+  "env": "prod",
+  "team": "platform"
+}

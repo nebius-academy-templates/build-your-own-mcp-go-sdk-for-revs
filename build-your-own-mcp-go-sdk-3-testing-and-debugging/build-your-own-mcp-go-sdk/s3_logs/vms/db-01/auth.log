@@ -1,0 +1,14 @@
+2026-09-10T01:50:35.723760+00:00 db-01 sshd[16]: Server listening on 0.0.0.0 port 22.
+2026-09-10T01:50:35.729664+00:00 db-01 sshd[16]: Server listening on :: port 22.
+2026-09-10T11:02:37.281408+00:00 db-01 CRON[821]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)
+2026-09-10T11:02:38.027904+00:00 db-01 CRON[821]: pam_unix(cron:session): session closed for user root
+2026-09-11T00:14:36.412224+00:00 db-01 sshd[14]: Server listening on 0.0.0.0 port 22.
+2026-09-11T00:14:36.417552+00:00 db-01 sshd[14]: Server listening on :: port 22.
+2026-09-11T07:58:16.487040+00:00 db-01 sshd[689]: Invalid user test from 172.18.0.5 port 41110
+2026-09-11T07:58:17.666256+00:00 db-01 sshd[689]: pam_unix(sshd:auth): check pass; user unknown
+2026-09-11T07:58:17.681376+00:00 db-01 sshd[689]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5 
+2026-09-11T08:04:14.649168+00:00 db-01 sshd[689]: Failed password for invalid user test from 172.18.0.5 port 41110 ssh2
+2026-09-11T08:06:14.706576+00:00 db-01 sshd[689]: Connection closed by invalid user test 172.18.0.5 port 41110 [preauth]
+2026-09-11T20:18:32.533488+00:00 db-01 sshd[1759]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5  user=opuser
+2026-09-11T20:22:46.019280+00:00 db-01 sshd[1759]: Failed password for opuser from 172.18.0.5 port 50778 ssh2
+2026-09-11T20:26:54.868848+00:00 db-01 sshd[1759]: Connection closed by authenticating user opuser 172.18.0.5 port 50778 [preauth]

@@ -1,0 +1,57 @@
+2026-09-10 00:00:04.608 UTC [16] LOG:  received smart shutdown request
+2026-09-10 00:00:04.896 UTC [16] LOG:  background worker "logical replication launcher" (PID 26) exited with exit code 1
+2026-09-10 00:00:06.336 UTC [21] LOG:  checkpoint complete: wrote 340 buffers (2.1%); 0 WAL file(s) added, 0 removed, 1 recycled; write=16.254 s, sync=0.005 s, total=16.265 s; sync files=32, longest=0.004 s, average=0.001 s; distance=2324 kB, estimate=3805 kB; lsn=0/A0D2EE8, redo lsn=0/A095AB8
+2026-09-10 00:00:06.336 UTC [21] LOG:  shutting down
+2026-09-10 00:00:06.336 UTC [21] LOG:  checkpoint starting: shutdown immediate
+2026-09-10 00:00:07.488 UTC [21] LOG:  checkpoint complete: wrote 23 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.005 s, sync=0.002 s, total=0.009 s; sync files=8, longest=0.001 s, average=0.001 s; distance=245 kB, estimate=3449 kB; lsn=0/A0D2F60, redo lsn=0/A0D2F60
+2026-09-10 00:00:07.920 UTC [16] LOG:  database system is shut down
+2026-09-10 00:09:49.968 UTC [16] LOG:  starting PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+2026-09-10 00:09:49.968 UTC [16] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-09-10 00:09:49.968 UTC [16] LOG:  listening on IPv6 address "::", port 5432
+2026-09-10 00:09:50.400 UTC [16] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-09-10 00:09:50.832 UTC [23] LOG:  database system was shut down at 2026-09-11 14:02:46 UTC
+2026-09-10 00:09:51.120 UTC [16] LOG:  database system is ready to accept connections
+2026-09-10 07:55:39.216 UTC [38] LOG:  process 38 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1003.840 ms at character 13
+2026-09-10 07:55:39.216 UTC [38] DETAIL:  Process holding the lock: 692. Wait queue: 38.
+2026-09-10 07:55:39.216 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 08:00:26.784 UTC [38] ERROR:  canceling statement due to lock timeout at character 13
+2026-09-10 08:00:26.784 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 08:02:58.704 UTC [38] LOG:  process 38 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1001.018 ms at character 13
+2026-09-10 08:02:58.704 UTC [38] DETAIL:  Process holding the lock: 692. Wait queue: 38.
+2026-09-10 08:02:58.704 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 08:05:18.672 UTC [38] LOG:  process 38 acquired RowExclusiveLock on relation 16505 of database 16387 after 1973.473 ms at character 13
+2026-09-10 08:05:18.672 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 12:09:51.984 UTC [21] LOG:  checkpoint starting: time
+2026-09-10 13:53:38.112 UTC [38] LOG:  process 38 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1001.359 ms
+2026-09-10 13:53:38.112 UTC [38] DETAIL:  Process holding the lock: 1214. Wait queue: 38.
+2026-09-10 13:53:38.112 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 13:58:26.112 UTC [38] ERROR:  canceling statement due to lock timeout
+2026-09-10 13:58:26.112 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 14:00:58.032 UTC [38] LOG:  process 38 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1001.317 ms
+2026-09-10 14:00:58.032 UTC [38] DETAIL:  Process holding the lock: 1214. Wait queue: 38.
+2026-09-10 14:00:58.032 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 14:05:03.984 UTC [38] LOG:  process 38 acquired RowExclusiveLock on relation 16505 of database 16387 after 2709.522 ms
+2026-09-10 14:05:03.984 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 14:08:51.072 UTC [21] LOG:  checkpoint complete: wrote 485 buffers (3.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=49.545 s, sync=0.023 s, total=49.577 s; sync files=42, longest=0.009 s, average=0.001 s; distance=2586 kB, estimate=2586 kB; lsn=0/A420110, redo lsn=0/A359A68
+2026-09-10 19:52:48.864 UTC [37] LOG:  process 37 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1005.992 ms
+2026-09-10 19:52:48.864 UTC [37] DETAIL:  Process holding the lock: 1733. Wait queue: 37, 38.
+2026-09-10 19:52:48.864 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 19:53:48.336 UTC [38] LOG:  process 38 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1004.001 ms
+2026-09-10 19:53:48.336 UTC [38] DETAIL:  Process holding the lock: 1733. Wait queue: 37, 38.
+2026-09-10 19:53:48.336 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 19:57:36.288 UTC [37] ERROR:  canceling statement due to lock timeout
+2026-09-10 19:57:36.288 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 19:58:36.336 UTC [38] ERROR:  canceling statement due to lock timeout
+2026-09-10 19:58:36.336 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 20:00:09.216 UTC [37] LOG:  process 37 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1002.412 ms
+2026-09-10 20:00:09.216 UTC [37] DETAIL:  Process holding the lock: 1733. Wait queue: 37, 38.
+2026-09-10 20:00:09.216 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 20:01:08.544 UTC [38] LOG:  process 38 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1000.251 ms
+2026-09-10 20:01:08.544 UTC [38] DETAIL:  Process holding the lock: 1733. Wait queue: 37, 38.
+2026-09-10 20:01:08.544 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 20:04:57.792 UTC [37] ERROR:  canceling statement due to lock timeout
+2026-09-10 20:04:57.792 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 20:05:00.240 UTC [38] LOG:  process 38 acquired RowExclusiveLock on relation 16505 of database 16387 after 2609.197 ms
+2026-09-10 20:05:00.240 UTC [38] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 22:04:48.000 UTC [38] LOG:  could not receive data from client: Connection reset by peer
+2026-09-11 00:11:27.024 UTC [21] LOG:  checkpoint starting: time
