@@ -1,0 +1,2338 @@
+{
+ "about": "Facts for the practice 3 checks, computed from the rules in CONTRACT.md and docs/log-formats.md on the raw files, without scan_id. 'trees' are log roots the checks build in temporary folders, with the entry kinds of practice 2's expected.json. A timeline call scans with 'scan' first; '{scan_id}' in a result or an error stands for that scan's id. A call has 'result' or 'error' (the exact tool error text).",
+ "trees": {
+  "tree": {
+   "root": "logs root",
+   "entries": [
+    {
+     "path": "logs root/values/metrics.log",
+     "text": [
+      "2026-01-15T10:01:00.000Z INFO meter reading v=0",
+      "2026-01-15T10:02:00.000Z INFO meter reading v=0.125",
+      "2026-01-15T10:06:00.000Z INFO meter reading v=-0.001",
+      "2026-01-15T10:07:00.000Z INFO meter reading v=0.000",
+      "2026-01-15T10:08:00.000Z INFO meter reading v=12abc",
+      "2026-01-15T10:09:00.000Z INFO meter reading v=1e5",
+      "2026-01-15T10:09:30.000Z INFO meter reading v=.5",
+      "2026-01-15T10:21:00.000Z INFO meter reading v=7",
+      "2026-01-15T10:22:00.000Z INFO meter reading v=3",
+      "2026-01-15T10:23:59.999Z INFO meter reading v=5",
+      "2026-01-15T10:24:00.000Z WARN meter note without a value",
+      "2026-01-16T00:03:00.000Z INFO meter reading v=+2.5"
+     ]
+    },
+    {
+     "path": "logs root/notes/untimed.log",
+     "text": [
+      "tests/test_notes.py::test_one PASSED                                    [ 50%]",
+      "tests/test_notes.py::test_two FAILED                                    [100%]"
+     ]
+    },
+    {
+     "path": "logs root/broken/bad.log.gz",
+     "bytes": "this is not gzip data\n"
+    },
+    {
+     "path": "logs root/broken/good.log",
+     "text": [
+      "2026-01-15T10:30:00.000Z INFO meter reading v=4",
+      "2026-01-15T10:31:00.000Z INFO meter reading v=6"
+     ]
+    },
+    {
+     "path": "logs root/overflow/values.log",
+     "text": [
+      "2026-01-15T10:01:00.000Z INFO meter reading v=9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+      "2026-01-15T10:02:00.000Z INFO meter reading v=7"
+     ]
+    }
+   ]
+  }
+ },
+ "calls": [
+  {
+   "id": "timeline-app-quota-hourly",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "min_level": "any"
+   },
+   "args": {
+    "pattern": "quota exceeded",
+    "bucket_minutes": 60
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "quota exceeded",
+    "value_pattern": null,
+    "bucket_minutes": 60,
+    "start": "2026-08-30T02:00:00Z",
+    "end": "2026-08-30T21:00:00Z",
+    "total": 268,
+    "buckets": [
+     {
+      "start": "2026-08-30T02:00:00Z",
+      "count": 67,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T03:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T04:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T05:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T06:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T07:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T08:00:00Z",
+      "count": 66,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T10:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T11:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T12:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T13:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T14:00:00Z",
+      "count": 68,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T15:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T16:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T17:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T18:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T19:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T20:00:00Z",
+      "count": 67,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-app-window",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T08:00",
+    "until": "2026-08-30T10:00"
+   },
+   "args": {
+    "pattern": "quota exceeded",
+    "bucket_minutes": 15
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "quota exceeded",
+    "value_pattern": null,
+    "bucket_minutes": 15,
+    "start": "2026-08-30T08:00:00Z",
+    "end": "2026-08-30T10:00:00Z",
+    "total": 66,
+    "buckets": [
+     {
+      "start": "2026-08-30T08:00:00Z",
+      "count": 66,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T08:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T08:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T08:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-app-whole-day",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+   },
+   "args": {
+    "bucket_minutes": 1440
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": null,
+    "bucket_minutes": 1440,
+    "start": "2026-08-30T00:00:00Z",
+    "end": "2026-08-31T00:00:00Z",
+    "total": 4330,
+    "buckets": [
+     {
+      "start": "2026-08-30T00:00:00Z",
+      "count": 4330,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-app-since-only",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T20:00"
+   },
+   "args": {
+    "pattern": "quota",
+    "bucket_minutes": 30
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "quota",
+    "value_pattern": null,
+    "bucket_minutes": 30,
+    "start": "2026-08-30T20:00:00Z",
+    "end": "2026-08-30T20:30:00Z",
+    "total": 67,
+    "buckets": [
+     {
+      "start": "2026-08-30T20:00:00Z",
+      "count": 67,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-access-bytes",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/edge-7c1a/archive/nginx-access-2026-08-30.log.gz",
+    "min_level": "any"
+   },
+   "args": {
+    "value_pattern": "\" \\d{3} (\\d+) ",
+    "bucket_minutes": 180
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": "\" \\d{3} (\\d+) ",
+    "bucket_minutes": 180,
+    "start": "2026-08-29T21:00:00Z",
+    "end": "2026-08-31T03:00:00Z",
+    "total": 15864,
+    "buckets": [
+     {
+      "start": "2026-08-29T21:00:00Z",
+      "count": 2,
+      "value_count": 2,
+      "min": 21.0,
+      "median": 139.0,
+      "max": 257.0
+     },
+     {
+      "start": "2026-08-30T00:00:00Z",
+      "count": 3971,
+      "value_count": 3971,
+      "min": 0.0,
+      "median": 67.0,
+      "max": 960.0
+     },
+     {
+      "start": "2026-08-30T03:00:00Z",
+      "count": 11,
+      "value_count": 11,
+      "min": 21.0,
+      "median": 33.0,
+      "max": 291.0
+     },
+     {
+      "start": "2026-08-30T06:00:00Z",
+      "count": 3963,
+      "value_count": 3963,
+      "min": 0.0,
+      "median": 67.0,
+      "max": 960.0
+     },
+     {
+      "start": "2026-08-30T09:00:00Z",
+      "count": 13,
+      "value_count": 13,
+      "min": 21.0,
+      "median": 35.0,
+      "max": 257.0
+     },
+     {
+      "start": "2026-08-30T12:00:00Z",
+      "count": 3934,
+      "value_count": 3934,
+      "min": 0.0,
+      "median": 67.0,
+      "max": 960.0
+     },
+     {
+      "start": "2026-08-30T15:00:00Z",
+      "count": 17,
+      "value_count": 17,
+      "min": 21.0,
+      "median": 33.0,
+      "max": 257.0
+     },
+     {
+      "start": "2026-08-30T18:00:00Z",
+      "count": 3945,
+      "value_count": 3945,
+      "min": 0.0,
+      "median": 67.0,
+      "max": 960.0
+     },
+     {
+      "start": "2026-08-30T21:00:00Z",
+      "count": 7,
+      "value_count": 7,
+      "min": 21.0,
+      "median": 38.0,
+      "max": 291.0
+     },
+     {
+      "start": "2026-08-31T00:00:00Z",
+      "count": 1,
+      "value_count": 1,
+      "min": 21.0,
+      "median": 21.0,
+      "max": 21.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-tree-values",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values/metrics.log",
+    "min_level": "any"
+   },
+   "args": {
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 5
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 5,
+    "start": "2026-01-15T10:00:00Z",
+    "end": "2026-01-16T00:05:00Z",
+    "total": 12,
+    "buckets": [
+     {
+      "start": "2026-01-15T10:00:00Z",
+      "count": 2,
+      "value_count": 2,
+      "min": 0.0,
+      "median": 0.062,
+      "max": 0.125
+     },
+     {
+      "start": "2026-01-15T10:05:00Z",
+      "count": 5,
+      "value_count": 2,
+      "min": -0.001,
+      "median": -0.001,
+      "max": 0.0
+     },
+     {
+      "start": "2026-01-15T10:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:20:00Z",
+      "count": 4,
+      "value_count": 3,
+      "min": 3.0,
+      "median": 5.0,
+      "max": 7.0
+     },
+     {
+      "start": "2026-01-15T10:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:05:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:10:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:15:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:20:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:25:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:35:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:40:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:45:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:50:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:55:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-16T00:00:00Z",
+      "count": 1,
+      "value_count": 1,
+      "min": 2.5,
+      "median": 2.5,
+      "max": 2.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-tree-align-7",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values",
+    "since": "2026-01-15T10:05",
+    "until": "2026-01-15T10:30"
+   },
+   "args": {
+    "pattern": "meter",
+    "bucket_minutes": 7
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "meter",
+    "value_pattern": null,
+    "bucket_minutes": 7,
+    "start": "2026-01-15T10:02:00Z",
+    "end": "2026-01-15T10:30:00Z",
+    "total": 9,
+    "buckets": [
+     {
+      "start": "2026-01-15T10:02:00Z",
+      "count": 3,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:09:00Z",
+      "count": 2,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:16:00Z",
+      "count": 2,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T10:23:00Z",
+      "count": 2,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-tree-days",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 1440
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 1440,
+    "start": "2026-01-15T00:00:00Z",
+    "end": "2026-01-17T00:00:00Z",
+    "total": 12,
+    "buckets": [
+     {
+      "start": "2026-01-15T00:00:00Z",
+      "count": 11,
+      "value_count": 7,
+      "min": -0.001,
+      "median": 0.125,
+      "max": 7.0
+     },
+     {
+      "start": "2026-01-16T00:00:00Z",
+      "count": 1,
+      "value_count": 1,
+      "min": 2.5,
+      "median": 2.5,
+      "max": 2.5
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-tree-no-match-since",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values",
+    "since": "2026-01-15T10:00"
+   },
+   "args": {
+    "pattern": "nothing matches this",
+    "bucket_minutes": 60
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "nothing matches this",
+    "value_pattern": null,
+    "bucket_minutes": 60,
+    "start": "2026-01-15T10:00:00Z",
+    "end": null,
+    "total": 0,
+    "buckets": []
+   }
+  },
+  {
+   "id": "timeline-tree-no-match-until",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values",
+    "until": "2026-01-15T12:00"
+   },
+   "args": {
+    "pattern": "nothing matches this",
+    "bucket_minutes": 60
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "nothing matches this",
+    "value_pattern": null,
+    "bucket_minutes": 60,
+    "start": null,
+    "end": null,
+    "total": 0,
+    "buckets": []
+   }
+  },
+  {
+   "id": "timeline-tree-no-match",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "pattern": "nothing matches this"
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "nothing matches this",
+    "value_pattern": null,
+    "bucket_minutes": 60,
+    "start": null,
+    "end": null,
+    "total": 0,
+    "buckets": []
+   }
+  },
+  {
+   "id": "timeline-tree-untimed",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "notes/untimed.log",
+    "min_level": "any"
+   },
+   "args": {},
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": null,
+    "bucket_minutes": 60,
+    "start": null,
+    "end": null,
+    "total": 0,
+    "buckets": []
+   }
+  },
+  {
+   "id": "timeline-tree-skipped-file",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "broken",
+    "min_level": "any"
+   },
+   "args": {
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 60
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 60,
+    "start": "2026-01-15T10:00:00Z",
+    "end": "2026-01-15T11:00:00Z",
+    "total": 2,
+    "buckets": [
+     {
+      "start": "2026-01-15T10:00:00Z",
+      "count": 2,
+      "value_count": 2,
+      "min": 4.0,
+      "median": 5.0,
+      "max": 6.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-tree-min-level-ignored",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values",
+    "min_level": "error"
+   },
+   "args": {
+    "pattern": "meter",
+    "bucket_minutes": 60
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "meter",
+    "value_pattern": null,
+    "bucket_minutes": 60,
+    "start": "2026-01-15T10:00:00Z",
+    "end": "2026-01-16T01:00:00Z",
+    "total": 12,
+    "buckets": [
+     {
+      "start": "2026-01-15T10:00:00Z",
+      "count": 11,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T11:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T12:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T13:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T14:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T15:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T16:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T17:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T18:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T19:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T20:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T21:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T22:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-15T23:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-01-16T00:00:00Z",
+      "count": 1,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-tree-value-overflow",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "overflow",
+    "min_level": "any"
+   },
+   "args": {
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 60
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": null,
+    "value_pattern": "v=(\\S+)",
+    "bucket_minutes": 60,
+    "start": "2026-01-15T10:00:00Z",
+    "end": "2026-01-15T11:00:00Z",
+    "total": 2,
+    "buckets": [
+     {
+      "start": "2026-01-15T10:00:00Z",
+      "count": 2,
+      "value_count": 1,
+      "min": 7.0,
+      "median": 7.0,
+      "max": 7.0
+     }
+    ]
+   }
+  },
+  {
+   "id": "timeline-e11-no-group",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "value_pattern": "v=\\S+"
+   },
+   "error": "value_pattern must contain exactly one capture group, for example \"size=(\\d+)\"."
+  },
+  {
+   "id": "timeline-e11-two-groups",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "value_pattern": "(v)=(\\S+)"
+   },
+   "error": "value_pattern must contain exactly one capture group, for example \"size=(\\d+)\"."
+  },
+  {
+   "id": "timeline-e11-non-capturing",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "value_pattern": "(?:v)=\\S+"
+   },
+   "error": "value_pattern must contain exactly one capture group, for example \"size=(\\d+)\"."
+  },
+  {
+   "id": "timeline-e12-window",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values",
+    "since": "2026-01-15",
+    "until": "2026-01-16"
+   },
+   "args": {
+    "bucket_minutes": 1
+   },
+   "error": "the window needs 1440 buckets and the limit is 500. Pass a larger bucket_minutes."
+  },
+  {
+   "id": "timeline-e12-lines",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+   },
+   "args": {
+    "bucket_minutes": 1
+   },
+   "error": "the window needs 1293 buckets and the limit is 500. Pass a larger bucket_minutes."
+  },
+  {
+   "id": "timeline-e5-pattern",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "pattern": "meter("
+   },
+   "error": "pattern is not a valid regular expression. Escape special characters such as ( [ . * with a backslash, or search for a plain word."
+  },
+  {
+   "id": "timeline-e5-value-pattern",
+   "tool": "timeline",
+   "root": "tree",
+   "scan": {
+    "path": "values"
+   },
+   "args": {
+    "value_pattern": "v=(\\S+"
+   },
+   "error": "value_pattern is not a valid regular expression. Escape special characters such as ( [ . * with a backslash, or search for a plain word."
+  }
+ ]
+}

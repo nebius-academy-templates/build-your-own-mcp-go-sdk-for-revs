@@ -1,0 +1,17 @@
+2026-09-10T00:09:43.478352+00:00 cache-01 sshd[15]: Server listening on 0.0.0.0 port 22.
+2026-09-10T00:09:43.534800+00:00 cache-01 sshd[15]: Server listening on :: port 22.
+2026-09-10T02:54:46.451808+00:00 cache-01 sshd[222]: Invalid user postgres from 172.18.0.5 port 41446
+2026-09-10T02:54:47.650752+00:00 cache-01 sshd[222]: pam_unix(sshd:auth): check pass; user unknown
+2026-09-10T02:54:47.660112+00:00 cache-01 sshd[222]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5 
+2026-09-10T02:58:26.636592+00:00 cache-01 sshd[222]: Failed password for invalid user postgres from 172.18.0.5 port 41446 ssh2
+2026-09-10T02:58:42.033648+00:00 cache-01 sshd[222]: Connection closed by invalid user postgres 172.18.0.5 port 41446 [preauth]
+2026-09-10T08:30:49.569120+00:00 cache-01 sshd[630]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5  user=opuser
+2026-09-10T08:36:36.479088+00:00 cache-01 sshd[630]: Failed password for opuser from 172.18.0.5 port 40836 ssh2
+2026-09-10T08:39:11.780352+00:00 cache-01 sshd[630]: Connection closed by authenticating user opuser 172.18.0.5 port 40836 [preauth]
+2026-09-10T12:26:22.428960+00:00 cache-01 sshd[920]: Accepted password for opuser from 172.18.0.5 port 49616 ssh2
+2026-09-10T12:26:22.527744+00:00 cache-01 sshd[920]: pam_unix(sshd:session): session opened for user opuser(uid=1000) by (uid=0)
+2026-09-10T12:26:22.791264+00:00 cache-01 sshd[920]: pam_env(sshd:session): deprecated reading of user environment enabled
+2026-09-10T12:26:22.797888+00:00 cache-01 sshd[920]: pam_env(sshd:session): Unable to open env file: /etc/default/locale: No such file or directory
+2026-09-10T12:26:28.979952+00:00 cache-01 sshd[926]: Received disconnect from 172.18.0.5 port 49616:11: disconnected by user
+2026-09-10T12:26:28.991616+00:00 cache-01 sshd[926]: Disconnected from user opuser 172.18.0.5 port 49616
+2026-09-10T12:26:29.018976+00:00 cache-01 sshd[920]: pam_unix(sshd:session): session closed for user opuser

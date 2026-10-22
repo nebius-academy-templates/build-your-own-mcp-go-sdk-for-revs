@@ -1,0 +1,322 @@
+{
+ "about": "Facts and shared inputs for the practice 4 checks, computed from the rules in CONTRACT.md and docs/log-formats.md on the raw files. 'calls' are made over HTTP; a call with 'scan' scans with it first, and '{scan_id}' in a result stands for that scan's id. 'tokens' is the LOG_TRIAGE_TOKENS value the checks start the server with, and 'callers' names which of those tokens each check uses. 'origins' lists Origin values the server lets through and values it answers 403, with '{port}' standing for the server's port. 'prompt' is the triage prompt's arguments, the order the rendered text names the tools in, and the made-up arguments the checks render it with. 'tools' lists the tools each kind of caller sees.",
+ "trees": {},
+ "calls": [
+  {
+   "id": "summary-app-window",
+   "tool": "summarize_logs",
+   "root": "s3_logs",
+   "args": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T08:00",
+    "until": "2026-08-30T10:00",
+    "min_level": "any",
+    "limit": 5
+   },
+   "result": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T08:00:00Z",
+    "until": "2026-08-30T10:00:00Z",
+    "min_level": "any",
+    "files_scanned": 1,
+    "skipped": [],
+    "lines_scanned": 4330,
+    "lines_in_window": 1083,
+    "first_seen": "2026-08-30T08:00:44Z",
+    "last_seen": "2026-08-30T09:49:10Z",
+    "by_level": {
+     "critical": 0,
+     "error": 0,
+     "warning": 231,
+     "info": 852,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [
+     {
+      "group_id": "698b8fc1884a",
+      "format": "app",
+      "level": "info",
+      "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+      "count": 283,
+      "first_seen": "2026-08-30T08:00:44Z",
+      "last_seen": "2026-08-30T08:02:29Z",
+      "file_count": 1,
+      "files": [
+       "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+      ],
+      "example": {
+       "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+       "line": 1088,
+       "text": "2026-08-30T08:00:44.544Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-1b39032e status=201"
+      }
+     },
+     {
+      "group_id": "8857dd279d4d",
+      "format": "app",
+      "level": "warning",
+      "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+      "count": 165,
+      "first_seen": "2026-08-30T08:00:49Z",
+      "last_seen": "2026-08-30T08:02:15Z",
+      "file_count": 1,
+      "files": [
+       "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+      ],
+      "example": {
+       "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+       "line": 1123,
+       "text": "2026-08-30T08:00:49.537Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ba95b6f5 status=409"
+      }
+     },
+     {
+      "group_id": "ded749111654",
+      "format": "app",
+      "level": "info",
+      "pattern": "deploy queued duration_ms=<n> method=POST path=/deploy-jobs request_id=req-<hex> status=<n>",
+      "count": 148,
+      "first_seen": "2026-08-30T08:01:28Z",
+      "last_seen": "2026-08-30T08:01:48Z",
+      "file_count": 1,
+      "files": [
+       "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+      ],
+      "example": {
+       "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+       "line": 1483,
+       "text": "2026-08-30T08:01:28.396Z INFO provisioner deploy queued duration_ms=0 method=POST path=/deploy-jobs request_id=req-c46bddba status=202"
+      }
+     },
+     {
+      "group_id": "80588a81c560",
+      "format": "app",
+      "level": "info",
+      "pattern": "deploy completed deploy_id=<n>",
+      "count": 147,
+      "first_seen": "2026-08-30T08:02:11Z",
+      "last_seen": "2026-08-30T09:49:10Z",
+      "file_count": 1,
+      "files": [
+       "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+      ],
+      "example": {
+       "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+       "line": 1833,
+       "text": "2026-08-30T08:02:11.770Z INFO provisioner deploy completed deploy_id=1468"
+      }
+     },
+     {
+      "group_id": "ad95ab52468d",
+      "format": "app",
+      "level": "info",
+      "pattern": "dns zone created duration_ms=<n> method=POST path=/dns-zones request_id=req-<hex> status=<n>",
+      "count": 146,
+      "first_seen": "2026-08-30T08:01:48Z",
+      "last_seen": "2026-08-30T08:02:08Z",
+      "file_count": 1,
+      "files": [
+       "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+      ],
+      "example": {
+       "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+       "line": 1631,
+       "text": "2026-08-30T08:01:48.599Z INFO provisioner dns zone created duration_ms=0 method=POST path=/dns-zones request_id=req-211bb555 status=201"
+      }
+     }
+    ],
+    "total_groups": 10,
+    "shown": 5,
+    "note": "Showing 5 of 10 groups. Raise limit (up to 100) or narrow the path or the window."
+   }
+  },
+  {
+   "id": "group-lines-app-window",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T08:00",
+    "until": "2026-08-30T10:00",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 1
+   },
+   "args": {
+    "limit": 3
+   },
+   "group_id": "8857dd279d4d",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "8857dd279d4d",
+    "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+    "lines": [
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1123,
+      "time": "2026-08-30T08:00:49Z",
+      "text": "2026-08-30T08:00:49.537Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ba95b6f5 status=409"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1125,
+      "time": "2026-08-30T08:00:49Z",
+      "text": "2026-08-30T08:00:49.610Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-4f8bbe72 status=409"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1127,
+      "time": "2026-08-30T08:00:49Z",
+      "text": "2026-08-30T08:00:49.685Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ceee9a51 status=409"
+     }
+    ],
+    "total": 165,
+    "shown": 3,
+    "note": "Showing 3 of 165 lines. Pass offset=3 for more."
+   }
+  },
+  {
+   "id": "timeline-app-window",
+   "tool": "timeline",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T08:00",
+    "until": "2026-08-30T10:00",
+    "min_level": "any"
+   },
+   "args": {
+    "pattern": "quota exceeded",
+    "bucket_minutes": 30
+   },
+   "result": {
+    "scan_id": "{scan_id}",
+    "pattern": "quota exceeded",
+    "value_pattern": null,
+    "bucket_minutes": 30,
+    "start": "2026-08-30T08:00:00Z",
+    "end": "2026-08-30T10:00:00Z",
+    "total": 66,
+    "buckets": [
+     {
+      "start": "2026-08-30T08:00:00Z",
+      "count": 66,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T08:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:00:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     },
+     {
+      "start": "2026-08-30T09:30:00Z",
+      "count": 0,
+      "value_count": 0,
+      "min": null,
+      "median": null,
+      "max": null
+     }
+    ]
+   }
+  }
+ ],
+ "tokens": "checks-owner-token-1=owner,checks-owner-token-2=owner,checks-other-token=other,checks-viewer-token=viewer:read-only",
+ "callers": {
+  "owner": [
+   "checks-owner-token-1",
+   "checks-owner-token-2"
+  ],
+  "other": "checks-other-token",
+  "read_only": "checks-viewer-token",
+  "unknown": "checks-unknown-token"
+ },
+ "origins": {
+  "allowed": [
+   "http://localhost",
+   "http://localhost:6274",
+   "http://127.0.0.1",
+   "http://127.0.0.1:{port}"
+  ],
+  "forbidden": [
+   "http://evil.example",
+   "https://localhost",
+   "https://127.0.0.1:{port}",
+   "null",
+   "http://localhost.evil.example",
+   "http://127.0.0.1.evil.example",
+   "http://[::1]:{port}"
+  ]
+ },
+ "prompt": {
+  "name": "triage",
+  "arguments": [
+   {
+    "name": "symptom",
+    "required": true
+   },
+   {
+    "name": "path",
+    "required": false
+   },
+   {
+    "name": "since",
+    "required": false
+   },
+   {
+    "name": "until",
+    "required": false
+   }
+  ],
+  "tool_order": [
+   "list_logs",
+   "summarize_logs",
+   "group_lines",
+   "timeline",
+   "search_logs",
+   "read_lines",
+   "save_finding"
+  ],
+  "render": {
+   "symptom": "checkout pages time out after login",
+   "path": "hosts/example-7",
+   "since": "2030-01-02T03:04",
+   "until": "2030-01-02T05:06"
+  },
+  "render_symptom_only": {
+   "symptom": "reports arrive empty"
+  }
+ },
+ "tools": {
+  "writer": [
+   "list_logs",
+   "summarize_logs",
+   "search_logs",
+   "group_lines",
+   "read_lines",
+   "timeline",
+   "save_finding"
+  ],
+  "read_only": [
+   "list_logs",
+   "summarize_logs",
+   "search_logs",
+   "group_lines",
+   "read_lines",
+   "timeline"
+  ]
+ }
+}

@@ -1,0 +1,10 @@
+2026-09-10T01:50:35.708784+00:00 web-01 sshd[15]: Server listening on 0.0.0.0 port 22.
+2026-09-10T01:50:35.713536+00:00 web-01 sshd[15]: Server listening on :: port 22.
+2026-09-10T11:02:37.260096+00:00 web-01 CRON[35]: pam_env(cron:session): Unable to open env file: /etc/default/locale: No such file or directory
+2026-09-10T11:02:37.287600+00:00 web-01 CRON[35]: pam_unix(cron:session): session opened for user root(uid=0) by (uid=0)
+2026-09-10T11:02:38.032224+00:00 web-01 CRON[35]: pam_unix(cron:session): session closed for user root
+2026-09-11T00:14:34.870416+00:00 web-01 sshd[15]: Server listening on 0.0.0.0 port 22.
+2026-09-11T00:14:34.876896+00:00 web-01 sshd[15]: Server listening on :: port 22.
+2026-09-11T11:52:13.152000+00:00 web-01 sshd[35]: pam_unix(sshd:auth): authentication failure; logname= uid=0 euid=0 tty=ssh ruser= rhost=172.18.0.5  user=opuser
+2026-09-11T11:56:32.307216+00:00 web-01 sshd[35]: Failed password for opuser from 172.18.0.5 port 58934 ssh2
+2026-09-11T12:00:35.611920+00:00 web-01 sshd[35]: Connection closed by authenticating user opuser 172.18.0.5 port 58934 [preauth]

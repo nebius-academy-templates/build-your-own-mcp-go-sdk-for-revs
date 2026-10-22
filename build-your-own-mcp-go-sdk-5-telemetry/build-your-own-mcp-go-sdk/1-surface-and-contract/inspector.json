@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "log-triage": {
+      "command": "go",
+      "args": ["-C", "../solution", "run", "./cmd/log-triage", "--root", "../s3_logs", "--reports", "../reports"],
+      "protocolEra": "modern"
+    },
+    "log-triage-read-only": {
+      "command": "go",
+      "args": ["-C", "../solution", "run", "./cmd/log-triage", "--root", "../s3_logs", "--read-only"],
+      "protocolEra": "modern"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+bin/
+*.exe
+*.test
+*.out
+coverage.*
+go.work
+go.work.sum
+.env
+*.env
+!tokens.example.env
+.mcp.json
+.DS_Store
+.idea/
+.vscode/
+*.swp

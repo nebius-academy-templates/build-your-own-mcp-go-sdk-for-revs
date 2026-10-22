@@ -1,0 +1,2696 @@
+{
+ "about": "Facts for the practice 2 checks, computed from the rules in CONTRACT.md and docs/log-formats.md on the raw files, without scan_id and expires_at. 'trees' are log roots the checks build in temporary folders: each entry is a file or link under the tree's folder, and 'root' names the log root inside it. Entry kinds: 'symlink' (a link with that relative target), 'copy' and 'gunzip' (a file of s3_logs, as it is or decompressed), 'bytes' (UTF-8 text as it is), and 'text' (lines joined with a newline after each; 'fill' replaces {fill} with 'count' copies of 'char'; the block is written 'repeat' times, with {n} replaced by 1, 2, ... when 'numbered' is true; 'gzip' compresses it, 'cut_half' then keeps the first half of the compressed bytes; 'size' extends the file to that length). In arguments, '{root}' is the log root's absolute path. A group_lines call scans with 'scan' first; 'group_id' is the group it asks for, and '{scan_id}' in an error stands for the scan's id. A call has 'result' or 'error' (the exact tool error text). 'compare' limits what a check compares. 'formats_document' is the triage://formats content.",
+ "trees": {
+  "tree": {
+   "root": "logs root",
+   "entries": [
+    {
+     "path": "logs root/host.json",
+     "copy": "vms/web-01/host.json"
+    },
+    {
+     "path": "logs root/many/a.log",
+     "gunzip": "pods/edge-7c1a/archive/nginx-error-2026-08-29.log.gz"
+    },
+    {
+     "path": "logs root/many/b.log.gz",
+     "copy": "pods/edge-7c1a/archive/nginx-error-2026-08-29.log.gz"
+    },
+    {
+     "path": "logs root/many/c.log",
+     "gunzip": "pods/edge-7c1a/archive/nginx-error-2026-08-29.log.gz"
+    },
+    {
+     "path": "logs root/capped/worker.log",
+     "numbered": true,
+     "repeat": 10005,
+     "text": [
+      "2026-01-15T11:00:00.000Z INFO worker job {n} done"
+     ]
+    },
+    {
+     "path": "logs root/notes/untimed.log",
+     "text": [
+      "tests/test_notes.py::test_one PASSED                                    [ 50%]",
+      "tests/test_notes.py::test_two FAILED                                    [100%]",
+      "",
+      "FAILED tests/test_notes.py::test_two - assert 1 == 2"
+     ]
+    },
+    {
+     "path": "logs root/notes/wide.log",
+     "fill": {
+      "char": "y",
+      "count": 600
+     },
+     "text": [
+      "2026-01-15T10:00:00.000Z INFO worker short line",
+      "2026-01-15T10:00:01.000Z WARN worker wide line {fill} end"
+     ]
+    }
+   ]
+  },
+  "hostile": {
+   "root": "logs root",
+   "entries": [
+    {
+     "path": "outside/secret.log",
+     "text": [
+      "2026-01-15T09:00:00.000Z INFO vault outside the root, never served",
+      "2026-01-15T09:00:01.000Z ERROR vault outside the root, never served"
+     ]
+    },
+    {
+     "path": "root-link",
+     "symlink": "logs root"
+    },
+    {
+     "path": "logs root/app.log",
+     "text": [
+      "2026-01-15T10:00:00.000Z INFO api request served",
+      "2026-01-15T10:00:01.000Z WARN api request slow",
+      "2026-01-15T10:00:02.000Z ERROR api request failed"
+     ]
+    },
+    {
+     "path": "logs root/link-out.log",
+     "symlink": "../outside/secret.log"
+    },
+    {
+     "path": "logs root/link-in.log",
+     "symlink": "app.log"
+    },
+    {
+     "path": "logs root/linkdir",
+     "symlink": "../outside"
+    },
+    {
+     "path": "logs root/walk/good.log",
+     "text": [
+      "2026-01-15T10:05:00.000Z INFO walker step one",
+      "2026-01-15T10:05:01.000Z ERROR walker step two"
+     ]
+    },
+    {
+     "path": "logs root/walk/sub-link",
+     "symlink": "../../outside"
+    },
+    {
+     "path": "logs root/walk/zz-link.log",
+     "symlink": "../app.log"
+    },
+    {
+     "path": "logs root/broken/bad.log.gz",
+     "bytes": "this is not gzip data\n"
+    },
+    {
+     "path": "logs root/broken/good.log",
+     "text": [
+      "2026-01-15T10:06:00.000Z INFO mender still readable"
+     ]
+    },
+    {
+     "path": "logs root/cut/cut.log.gz",
+     "numbered": true,
+     "repeat": 5000,
+     "gzip": true,
+     "cut_half": true,
+     "text": [
+      "2026-01-15T10:07:00.000Z INFO copier chunk {n} copied"
+     ]
+    },
+    {
+     "path": "logs root/big/huge.log.gz",
+     "repeat": 1001625,
+     "gzip": true,
+     "text": [
+      "2026-01-15T10:00:00.000Z INFO filler padding line for the size cap"
+     ]
+    },
+    {
+     "path": "logs root/big/sparse.log",
+     "numbered": true,
+     "repeat": 60,
+     "size": 67108865,
+     "text": [
+      "2026-01-15T10:08:00.000Z INFO filler sparse head line {n}"
+     ]
+    },
+    {
+     "path": "logs root/long/long.log",
+     "fill": {
+      "char": "x",
+      "count": 70000
+     },
+     "text": [
+      "2026-01-15T10:09:00.000Z INFO stretcher short line",
+      "2026-01-15T10:09:01.000Z INFO stretcher long line {fill} TAIL"
+     ]
+    }
+   ]
+  }
+ },
+ "calls": [
+  {
+   "id": "group-app-any-first",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "limit": 5
+   },
+   "group_id": "698b8fc1884a",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "698b8fc1884a",
+    "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+    "lines": [
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 3,
+      "time": "2026-08-30T02:07:51Z",
+      "text": "2026-08-30T02:07:51.400Z INFO provisioner account provisioned duration_ms=1 method=POST path=/accounts request_id=req-194f3380 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4,
+      "time": "2026-08-30T02:07:51Z",
+      "text": "2026-08-30T02:07:51.725Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-bcd72306 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 5,
+      "time": "2026-08-30T02:07:51Z",
+      "text": "2026-08-30T02:07:51.957Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-e27f097e status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 6,
+      "time": "2026-08-30T02:07:52Z",
+      "text": "2026-08-30T02:07:52.110Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-66f0d2af status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 7,
+      "time": "2026-08-30T02:07:52Z",
+      "text": "2026-08-30T02:07:52.286Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-cbe0e80a status=201"
+     }
+    ],
+    "total": 1124,
+    "shown": 5,
+    "note": "Showing 5 of 1124 lines. Pass offset=5 for more."
+   }
+  },
+  {
+   "id": "group-app-any-middle",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "limit": 7,
+    "offset": 500
+   },
+   "group_id": "698b8fc1884a",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "698b8fc1884a",
+    "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+    "lines": [
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1963,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.358Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-9ec0285d status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1964,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.455Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-05fea86d status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1965,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.540Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-f57acda1 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1966,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.636Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-b9feebdc status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1967,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.737Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-641e1af1 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1968,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.839Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-bdafe895 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1969,
+      "time": "2026-08-30T08:02:23Z",
+      "text": "2026-08-30T08:02:23.941Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-d2b16689 status=201"
+     }
+    ],
+    "total": 1124,
+    "shown": 7,
+    "note": "Showing 7 of 1124 lines. Pass offset=507 for more."
+   }
+  },
+  {
+   "id": "group-app-any-last",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "offset": 1100
+   },
+   "group_id": "698b8fc1884a",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "698b8fc1884a",
+    "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+    "lines": [
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4163,
+      "time": "2026-08-30T20:03:59Z",
+      "text": "2026-08-30T20:03:59.703Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-597556e5 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4164,
+      "time": "2026-08-30T20:03:59Z",
+      "text": "2026-08-30T20:03:59.822Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-797638f5 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4165,
+      "time": "2026-08-30T20:03:59Z",
+      "text": "2026-08-30T20:03:59.958Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-98442b19 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4166,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.072Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-2b0f8d6d status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4167,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.215Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-fbc52070 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4168,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.334Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-2e86f3eb status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4169,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.418Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-9417da96 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4170,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.539Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-c1adcf1c status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4171,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.645Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-286581df status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4172,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.743Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-045e1308 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4173,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.838Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-dbc3eabd status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4174,
+      "time": "2026-08-30T20:04:00Z",
+      "text": "2026-08-30T20:04:00.941Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ed16c8d6 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4175,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.051Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-1b0cc7e3 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4176,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.156Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-86f13928 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4177,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.246Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-11352d93 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4178,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.330Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-c2519129 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4179,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.419Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-0403d625 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4180,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.524Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-3bb9195c status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4181,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.617Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-601dddf2 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4182,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.709Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-fcef4ef2 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4183,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.816Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-8d1ecd13 status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4184,
+      "time": "2026-08-30T20:04:01Z",
+      "text": "2026-08-30T20:04:01.952Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-1cf71b2c status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4185,
+      "time": "2026-08-30T20:04:02Z",
+      "text": "2026-08-30T20:04:02.126Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-42f639da status=201"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 4186,
+      "time": "2026-08-30T20:04:02Z",
+      "text": "2026-08-30T20:04:02.238Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-3a9842d8 status=201"
+     }
+    ],
+    "total": 1124,
+    "shown": 24,
+    "note": ""
+   }
+  },
+  {
+   "id": "group-app-any-past-the-end",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "offset": 5000
+   },
+   "group_id": "698b8fc1884a",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "698b8fc1884a",
+    "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+    "lines": [],
+    "total": 1124,
+    "shown": 0,
+    "note": ""
+   }
+  },
+  {
+   "id": "group-app-warning-defaults",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+   },
+   "group": {
+    "rank": 1
+   },
+   "args": {},
+   "group_id": "779b5baa801f",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "779b5baa801f",
+    "pattern": "quota exceeded domain_count=<n> plan=enterprise request_id=req-<hex>",
+    "lines": [
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 235,
+      "time": "2026-08-30T02:08:15Z",
+      "text": "2026-08-30T02:08:15.531Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-689fd090"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 237,
+      "time": "2026-08-30T02:08:15Z",
+      "text": "2026-08-30T02:08:15.627Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-6cc25d8b"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 239,
+      "time": "2026-08-30T02:08:15Z",
+      "text": "2026-08-30T02:08:15.699Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-9f0dff1a"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 241,
+      "time": "2026-08-30T02:08:15Z",
+      "text": "2026-08-30T02:08:15.768Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-f8a323cc"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 243,
+      "time": "2026-08-30T02:08:15Z",
+      "text": "2026-08-30T02:08:15.849Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-7a5459bb"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 245,
+      "time": "2026-08-30T02:08:15Z",
+      "text": "2026-08-30T02:08:15.946Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-ab314be7"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 247,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.063Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-a99d265e"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 249,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.173Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-0807caec"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 251,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.352Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-ca211496"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 253,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.466Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-60441ef4"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 255,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.536Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-0be484fd"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 257,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.608Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-d2205a7c"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 259,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.660Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-114470d6"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 261,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.705Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-5d79a69c"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 263,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.771Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-67e53cbe"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 265,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.828Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-10f22b26"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 267,
+      "time": "2026-08-30T02:08:16Z",
+      "text": "2026-08-30T02:08:16.898Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-9cca1b71"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1321,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.554Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-62ddacf5"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1323,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.696Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-925fb1c6"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1325,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.757Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-5f52f371"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1327,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.834Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-2e9a8130"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1329,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.881Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-3c07edaa"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1331,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.925Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-520ceafe"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1333,
+      "time": "2026-08-30T08:01:05Z",
+      "text": "2026-08-30T08:01:05.995Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-45410f87"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1335,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.183Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-15299060"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1337,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.256Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-5b108428"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1339,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.315Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-bfe8f6f7"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1341,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.382Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-60e31b22"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1343,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.441Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-81fd5b9f"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1345,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.506Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-cde9fb3c"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1347,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.572Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-876712c4"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1349,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.634Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-850b9b9a"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1351,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.700Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-0b55c8a4"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1353,
+      "time": "2026-08-30T08:01:06Z",
+      "text": "2026-08-30T08:01:06.746Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-c8e30cdc"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2407,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.268Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-75b61d8c"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2409,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.329Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-f11f0cc3"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2411,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.419Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-1e3a49c0"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2413,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.602Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-21f8811b"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2415,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.651Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-214dfcb8"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2417,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.726Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-e5bfb299"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2419,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.818Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-312c449d"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2421,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.891Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-c152b4cc"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2423,
+      "time": "2026-08-30T14:01:02Z",
+      "text": "2026-08-30T14:01:02.965Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-61309f26"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2425,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.024Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-7385bf3b"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2427,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.096Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-f16dde91"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2429,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.161Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-d0d2ea6c"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2431,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.215Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-e6204597"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2433,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.271Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-7fd51e46"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2435,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.314Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-73e24cfc"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 2437,
+      "time": "2026-08-30T14:01:03Z",
+      "text": "2026-08-30T14:01:03.355Z WARN provisioner quota exceeded domain_count=101 plan=enterprise request_id=req-18948d3a"
+     }
+    ],
+    "total": 68,
+    "shown": 50,
+    "note": "Showing 50 of 68 lines. Pass offset=50 for more."
+   }
+  },
+  {
+   "id": "group-app-window",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "since": "2026-08-30T08:00",
+    "until": "2026-08-30T10:00"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "limit": 3
+   },
+   "group_id": "8857dd279d4d",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "8857dd279d4d",
+    "pattern": "account provisioned duration_ms=<n> method=POST path=/accounts request_id=req-<hex> status=<n>",
+    "lines": [
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1123,
+      "time": "2026-08-30T08:00:49Z",
+      "text": "2026-08-30T08:00:49.537Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ba95b6f5 status=409"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1125,
+      "time": "2026-08-30T08:00:49Z",
+      "text": "2026-08-30T08:00:49.610Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-4f8bbe72 status=409"
+     },
+     {
+      "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+      "line": 1127,
+      "time": "2026-08-30T08:00:49Z",
+      "text": "2026-08-30T08:00:49.685Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ceee9a51 status=409"
+     }
+    ],
+    "total": 165,
+    "shown": 3,
+    "note": "Showing 3 of 165 lines. Pass offset=3 for more."
+   }
+  },
+  {
+   "id": "group-pytest-errors",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/ci-py-1/archive/pytest-2026-08-30.log.gz",
+    "min_level": "error"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "limit": 3
+   },
+   "group_id": "739cd628e381",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "739cd628e381",
+    "pattern": "tests/test_auth.py::test_signup_username_variety[<n>-user<n>] FAILED [ <n>%]",
+    "lines": [
+     {
+      "file": "pods/ci-py-1/archive/pytest-2026-08-30.log.gz",
+      "line": 68,
+      "time": "2026-08-30T02:00:00Z",
+      "text": "tests/test_auth.py::test_signup_username_variety[0-user1] FAILED         [  5%]"
+     },
+     {
+      "file": "pods/ci-py-1/archive/pytest-2026-08-30.log.gz",
+      "line": 69,
+      "time": "2026-08-30T02:00:00Z",
+      "text": "tests/test_auth.py::test_signup_username_variety[1-user2] FAILED         [  5%]"
+     },
+     {
+      "file": "pods/ci-py-1/archive/pytest-2026-08-30.log.gz",
+      "line": 70,
+      "time": "2026-08-30T02:00:00Z",
+      "text": "tests/test_auth.py::test_signup_username_variety[2-user3] FAILED         [  5%]"
+     }
+    ],
+    "total": 79,
+    "shown": 3,
+    "note": "Showing 3 of 79 lines. Pass offset=3 for more."
+   }
+  },
+  {
+   "id": "group-app-below-min-level",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+   },
+   "group": {
+    "below": 0
+   },
+   "args": {},
+   "group_id": "698b8fc1884a",
+   "error": "group \"698b8fc1884a\" is not in scan \"{scan_id}\". Use a group_id from that scan's groups."
+  },
+  {
+   "id": "group-app-not-in-scan",
+   "tool": "group_lines",
+   "root": "s3_logs",
+   "scan": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+   },
+   "group": "000000000000",
+   "args": {},
+   "group_id": "000000000000",
+   "error": "group \"000000000000\" is not in scan \"{scan_id}\". Use a group_id from that scan's groups."
+  },
+  {
+   "id": "group-tree-across-files",
+   "tool": "group_lines",
+   "root": "tree",
+   "scan": {
+    "path": "many",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "limit": 4,
+    "offset": 1
+   },
+   "group_id": "5e522f4db220",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "5e522f4db220",
+    "pattern": "upstream server temporarily disabled while connecting to upstream, client: <ip>, server: edge-<n>c<n>a, request: \"GET /api/v<n>/status HTTP/<n>\", upstream: \"http://<ip>/api/v<n>/status\", host: \"edge\"",
+    "lines": [
+     {
+      "file": "many/a.log",
+      "line": 4,
+      "time": "2026-08-29T00:21:36Z",
+      "text": "2026/08/29 00:21:36 [warn] 30#30: *1 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.13, server: edge-7c1a, request: \"GET /api/v0/status HTTP/1.1\", upstream: \"http://172.18.0.7:8000/api/v0/status\", host: \"edge\""
+     },
+     {
+      "file": "many/b.log.gz",
+      "line": 2,
+      "time": "2026-08-29T00:21:36Z",
+      "text": "2026/08/29 00:21:36 [warn] 30#30: *1 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.13, server: edge-7c1a, request: \"GET /api/v0/status HTTP/1.1\", upstream: \"http://172.18.0.9:8000/api/v0/status\", host: \"edge\""
+     },
+     {
+      "file": "many/b.log.gz",
+      "line": 4,
+      "time": "2026-08-29T00:21:36Z",
+      "text": "2026/08/29 00:21:36 [warn] 30#30: *1 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.13, server: edge-7c1a, request: \"GET /api/v0/status HTTP/1.1\", upstream: \"http://172.18.0.7:8000/api/v0/status\", host: \"edge\""
+     },
+     {
+      "file": "many/c.log",
+      "line": 2,
+      "time": "2026-08-29T00:21:36Z",
+      "text": "2026/08/29 00:21:36 [warn] 30#30: *1 upstream server temporarily disabled while connecting to upstream, client: 172.18.0.13, server: edge-7c1a, request: \"GET /api/v0/status HTTP/1.1\", upstream: \"http://172.18.0.9:8000/api/v0/status\", host: \"edge\""
+     }
+    ],
+    "total": 6,
+    "shown": 4,
+    "note": "Showing 4 of 6 lines. Pass offset=5 for more."
+   }
+  },
+  {
+   "id": "group-tree-untimed",
+   "tool": "group_lines",
+   "root": "tree",
+   "scan": {
+    "path": "notes/untimed.log",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {},
+   "group_id": "0060462d9953",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "0060462d9953",
+    "pattern": "",
+    "lines": [
+     {
+      "file": "notes/untimed.log",
+      "line": 3,
+      "time": null,
+      "text": ""
+     }
+    ],
+    "total": 1,
+    "shown": 1,
+    "note": ""
+   }
+  },
+  {
+   "id": "group-tree-capped-first",
+   "tool": "group_lines",
+   "root": "tree",
+   "scan": {
+    "path": "capped",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "limit": 3
+   },
+   "group_id": "d7498f107a04",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "d7498f107a04",
+    "pattern": "job <n> done",
+    "lines": [
+     {
+      "file": "capped/worker.log",
+      "line": 1,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 1 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 2,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 2 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 3,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 3 done"
+     }
+    ],
+    "total": 10005,
+    "shown": 3,
+    "note": "Showing 3 of 10005 lines. Pass offset=3 for more. Only the first 10000 lines are kept."
+   }
+  },
+  {
+   "id": "group-tree-capped-before-the-cap",
+   "tool": "group_lines",
+   "root": "tree",
+   "scan": {
+    "path": "capped",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "offset": 9949
+   },
+   "group_id": "d7498f107a04",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "d7498f107a04",
+    "pattern": "job <n> done",
+    "lines": [
+     {
+      "file": "capped/worker.log",
+      "line": 9950,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9950 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9951,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9951 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9952,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9952 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9953,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9953 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9954,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9954 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9955,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9955 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9956,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9956 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9957,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9957 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9958,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9958 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9959,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9959 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9960,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9960 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9961,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9961 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9962,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9962 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9963,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9963 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9964,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9964 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9965,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9965 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9966,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9966 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9967,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9967 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9968,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9968 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9969,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9969 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9970,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9970 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9971,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9971 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9972,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9972 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9973,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9973 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9974,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9974 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9975,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9975 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9976,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9976 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9977,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9977 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9978,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9978 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9979,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9979 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9980,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9980 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9981,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9981 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9982,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9982 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9983,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9983 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9984,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9984 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9985,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9985 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9986,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9986 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9987,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9987 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9988,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9988 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9989,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9989 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9990,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9990 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9991,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9991 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9992,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9992 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9993,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9993 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9994,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9994 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9995,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9995 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9996,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9996 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9997,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9997 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9998,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9998 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9999,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9999 done"
+     }
+    ],
+    "total": 10005,
+    "shown": 50,
+    "note": "Showing 50 of 10005 lines. Pass offset=9999 for more. Only the first 10000 lines are kept."
+   }
+  },
+  {
+   "id": "group-tree-capped-at-the-cap",
+   "tool": "group_lines",
+   "root": "tree",
+   "scan": {
+    "path": "capped",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "offset": 9990
+   },
+   "group_id": "d7498f107a04",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "d7498f107a04",
+    "pattern": "job <n> done",
+    "lines": [
+     {
+      "file": "capped/worker.log",
+      "line": 9991,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9991 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9992,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9992 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9993,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9993 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9994,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9994 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9995,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9995 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9996,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9996 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9997,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9997 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9998,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9998 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 9999,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 9999 done"
+     },
+     {
+      "file": "capped/worker.log",
+      "line": 10000,
+      "time": "2026-01-15T11:00:00Z",
+      "text": "2026-01-15T11:00:00.000Z INFO worker job 10000 done"
+     }
+    ],
+    "total": 10005,
+    "shown": 10,
+    "note": "Only the first 10000 lines are kept."
+   }
+  },
+  {
+   "id": "group-tree-capped-past-the-cap",
+   "tool": "group_lines",
+   "root": "tree",
+   "scan": {
+    "path": "capped",
+    "min_level": "any"
+   },
+   "group": {
+    "rank": 0
+   },
+   "args": {
+    "offset": 10000
+   },
+   "group_id": "d7498f107a04",
+   "result": {
+    "scan_id": "{scan_id}",
+    "group_id": "d7498f107a04",
+    "pattern": "job <n> done",
+    "lines": [],
+    "total": 10005,
+    "shown": 0,
+    "note": "Only the first 10000 lines are kept."
+   }
+  },
+  {
+   "id": "read-app-middle",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "line": 100
+   },
+   "result": {
+    "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "start": 95,
+    "end": 120,
+    "total_lines": 4330,
+    "lines": [
+     {
+      "line": 95,
+      "text": "2026-08-30T02:08:02.496Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-9e1575e2 status=201"
+     },
+     {
+      "line": 96,
+      "text": "2026-08-30T02:08:02.622Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-1950a715 status=201"
+     },
+     {
+      "line": 97,
+      "text": "2026-08-30T02:08:02.755Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-987e09b8 status=201"
+     },
+     {
+      "line": 98,
+      "text": "2026-08-30T02:08:02.906Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-a16f88d9 status=201"
+     },
+     {
+      "line": 99,
+      "text": "2026-08-30T02:08:03.053Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-dc7d74d7 status=201"
+     },
+     {
+      "line": 100,
+      "text": "2026-08-30T02:08:03.175Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-a9afa48c status=201"
+     },
+     {
+      "line": 101,
+      "text": "2026-08-30T02:08:03.312Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-33b99841 status=201"
+     },
+     {
+      "line": 102,
+      "text": "2026-08-30T02:08:03.468Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-99f67f7f status=201"
+     },
+     {
+      "line": 103,
+      "text": "2026-08-30T02:08:03.548Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-aa0021d1"
+     },
+     {
+      "line": 104,
+      "text": "2026-08-30T02:08:03.549Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-aa0021d1 status=409"
+     },
+     {
+      "line": 105,
+      "text": "2026-08-30T02:08:03.629Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-a0074063"
+     },
+     {
+      "line": 106,
+      "text": "2026-08-30T02:08:03.630Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-a0074063 status=409"
+     },
+     {
+      "line": 107,
+      "text": "2026-08-30T02:08:03.708Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-88fc0409"
+     },
+     {
+      "line": 108,
+      "text": "2026-08-30T02:08:03.708Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-88fc0409 status=409"
+     },
+     {
+      "line": 109,
+      "text": "2026-08-30T02:08:03.798Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-8ef4b9f2"
+     },
+     {
+      "line": 110,
+      "text": "2026-08-30T02:08:03.799Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-8ef4b9f2 status=409"
+     },
+     {
+      "line": 111,
+      "text": "2026-08-30T02:08:03.880Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-ea54650d"
+     },
+     {
+      "line": 112,
+      "text": "2026-08-30T02:08:03.880Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ea54650d status=409"
+     },
+     {
+      "line": 113,
+      "text": "2026-08-30T02:08:03.982Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-71e2499a"
+     },
+     {
+      "line": 114,
+      "text": "2026-08-30T02:08:03.983Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-71e2499a status=409"
+     },
+     {
+      "line": 115,
+      "text": "2026-08-30T02:08:04.065Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-43fc8538"
+     },
+     {
+      "line": 116,
+      "text": "2026-08-30T02:08:04.065Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-43fc8538 status=409"
+     },
+     {
+      "line": 117,
+      "text": "2026-08-30T02:08:04.122Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-9dd971dc"
+     },
+     {
+      "line": 118,
+      "text": "2026-08-30T02:08:04.122Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-9dd971dc status=409"
+     },
+     {
+      "line": 119,
+      "text": "2026-08-30T02:08:04.177Z WARN provisioner quota exceeded domain_count=6 plan=pro request_id=req-ebfa18fe"
+     },
+     {
+      "line": 120,
+      "text": "2026-08-30T02:08:04.177Z WARN provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-ebfa18fe status=409"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-app-start",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "line": 2,
+    "before": 5,
+    "after": 3
+   },
+   "result": {
+    "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "start": 1,
+    "end": 5,
+    "total_lines": 4330,
+    "lines": [
+     {
+      "line": 1,
+      "text": "2026-08-30T00:16:18.657Z INFO provisioner provisioner starting host=provisioner-2"
+     },
+     {
+      "line": 2,
+      "text": "2026-08-30T00:16:19.686Z INFO provisioner provisioner listening addr=:8080"
+     },
+     {
+      "line": 3,
+      "text": "2026-08-30T02:07:51.400Z INFO provisioner account provisioned duration_ms=1 method=POST path=/accounts request_id=req-194f3380 status=201"
+     },
+     {
+      "line": 4,
+      "text": "2026-08-30T02:07:51.725Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-bcd72306 status=201"
+     },
+     {
+      "line": 5,
+      "text": "2026-08-30T02:07:51.957Z INFO provisioner account provisioned duration_ms=0 method=POST path=/accounts request_id=req-e27f097e status=201"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-app-end",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "line": 4329,
+    "after": 200
+   },
+   "result": {
+    "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "start": 4324,
+    "end": 4330,
+    "total_lines": 4330,
+    "lines": [
+     {
+      "line": 4324,
+      "text": "2026-08-30T21:44:26.240Z INFO provisioner deploy completed deploy_id=2333"
+     },
+     {
+      "line": 4325,
+      "text": "2026-08-30T21:45:10.429Z INFO provisioner deploy completed deploy_id=2334"
+     },
+     {
+      "line": 4326,
+      "text": "2026-08-30T21:45:54.234Z INFO provisioner deploy completed deploy_id=2337"
+     },
+     {
+      "line": 4327,
+      "text": "2026-08-30T21:46:38.307Z INFO provisioner deploy completed deploy_id=2339"
+     },
+     {
+      "line": 4328,
+      "text": "2026-08-30T21:47:22.302Z INFO provisioner deploy completed deploy_id=2340"
+     },
+     {
+      "line": 4329,
+      "text": "2026-08-30T21:48:05.891Z INFO provisioner deploy completed deploy_id=2343"
+     },
+     {
+      "line": 4330,
+      "text": "2026-08-30T21:48:49.656Z INFO provisioner deploy completed deploy_id=2344"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-app-last-line-only",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "line": 4330,
+    "before": 0,
+    "after": 0
+   },
+   "result": {
+    "file": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "start": 4330,
+    "end": 4330,
+    "total_lines": 4330,
+    "lines": [
+     {
+      "line": 4330,
+      "text": "2026-08-30T21:48:49.656Z INFO provisioner deploy completed deploy_id=2344"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-php-dot-slash",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "./vms/web-01/archive/php-fpm-2026-08-30.log.gz",
+    "line": 3,
+    "before": 50,
+    "after": 200
+   },
+   "result": {
+    "file": "vms/web-01/archive/php-fpm-2026-08-30.log.gz",
+    "start": 1,
+    "end": 5,
+    "total_lines": 5,
+    "lines": [
+     {
+      "line": 1,
+      "text": "[29-Aug-2026 23:57:36] NOTICE: Terminating ..."
+     },
+     {
+      "line": 2,
+      "text": "[29-Aug-2026 23:57:36] NOTICE: exiting, bye-bye!"
+     },
+     {
+      "line": 3,
+      "text": "[30-Aug-2026 00:09:36] NOTICE: fpm is running, pid 21"
+     },
+     {
+      "line": 4,
+      "text": "[30-Aug-2026 00:09:36] NOTICE: ready to handle connections"
+     },
+     {
+      "line": 5,
+      "text": "[30-Aug-2026 00:09:36] NOTICE: systemd monitor interval set to 10000ms"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-tree-unknown-format",
+   "tool": "read_lines",
+   "root": "tree",
+   "args": {
+    "path": "host.json",
+    "line": 2,
+    "before": 1,
+    "after": 1
+   },
+   "result": {
+    "file": "host.json",
+    "start": 1,
+    "end": 3,
+    "total_lines": 5,
+    "lines": [
+     {
+      "line": 1,
+      "text": "{"
+     },
+     {
+      "line": 2,
+      "text": "  \"service\": \"web\","
+     },
+     {
+      "line": 3,
+      "text": "  \"env\": \"prod\","
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-tree-absolute",
+   "tool": "read_lines",
+   "root": "tree",
+   "args": {
+    "path": "{root}/notes/untimed.log",
+    "line": 4,
+    "before": 1,
+    "after": 0
+   },
+   "result": {
+    "file": "notes/untimed.log",
+    "start": 3,
+    "end": 4,
+    "total_lines": 4,
+    "lines": [
+     {
+      "line": 3,
+      "text": ""
+     },
+     {
+      "line": 4,
+      "text": "FAILED tests/test_notes.py::test_two - assert 1 == 2"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-tree-wide-line",
+   "tool": "read_lines",
+   "root": "tree",
+   "args": {
+    "path": "notes/wide.log",
+    "line": 2,
+    "before": 1,
+    "after": 0
+   },
+   "result": {
+    "file": "notes/wide.log",
+    "start": 1,
+    "end": 2,
+    "total_lines": 2,
+    "lines": [
+     {
+      "line": 1,
+      "text": "2026-01-15T10:00:00.000Z INFO worker short line"
+     },
+     {
+      "line": 2,
+      "text": "2026-01-15T10:00:01.000Z WARN worker wide line yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+     }
+    ]
+   }
+  },
+  {
+   "id": "read-app-past-the-end",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+    "line": 4331
+   },
+   "error": "line 4331 is past the end of \"pods/provisioner-2/archive/app-2026-08-30.log.gz\", which has 4330 lines."
+  },
+  {
+   "id": "read-php-past-the-end-dot-slash",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "./vms/web-01/archive/php-fpm-2026-08-30.log.gz",
+    "line": 6
+   },
+   "error": "line 6 is past the end of \"vms/web-01/archive/php-fpm-2026-08-30.log.gz\", which has 5 lines."
+  },
+  {
+   "id": "read-folder",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "vms/web-01",
+    "line": 1
+   },
+   "error": "\"vms/web-01\" is a folder. This needs one file; call list_logs to pick one."
+  },
+  {
+   "id": "read-folder-trailing-slash",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "vms/web-01/",
+    "line": 1
+   },
+   "error": "\"vms/web-01\" is a folder. This needs one file; call list_logs to pick one."
+  },
+  {
+   "id": "read-root-empty-path",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": "",
+    "line": 1
+   },
+   "error": "\".\" is a folder. This needs one file; call list_logs to pick one."
+  },
+  {
+   "id": "read-root-dot",
+   "tool": "read_lines",
+   "root": "s3_logs",
+   "args": {
+    "path": ".",
+    "line": 1
+   },
+   "error": "\".\" is a folder. This needs one file; call list_logs to pick one."
+  },
+  {
+   "id": "summarize-hostile-root",
+   "tool": "summarize_logs",
+   "root": "hostile",
+   "args": {
+    "min_level": "any",
+    "limit": 100
+   },
+   "result": {
+    "path": ".",
+    "since": null,
+    "until": null,
+    "min_level": "any",
+    "files_scanned": 4,
+    "skipped": [
+     {
+      "path": "big/huge.log.gz",
+      "reason": "too large"
+     },
+     {
+      "path": "big/sparse.log",
+      "reason": "too large"
+     },
+     {
+      "path": "broken/bad.log.gz",
+      "reason": "unreadable"
+     },
+     {
+      "path": "cut/cut.log.gz",
+      "reason": "unreadable"
+     },
+     {
+      "path": "link-in.log",
+      "reason": "symlink"
+     },
+     {
+      "path": "link-out.log",
+      "reason": "symlink"
+     },
+     {
+      "path": "linkdir",
+      "reason": "symlink"
+     },
+     {
+      "path": "walk/sub-link",
+      "reason": "symlink"
+     },
+     {
+      "path": "walk/zz-link.log",
+      "reason": "symlink"
+     }
+    ],
+    "lines_scanned": 8,
+    "lines_in_window": 8,
+    "first_seen": "2026-01-15T10:00:00Z",
+    "last_seen": "2026-01-15T10:09:01Z",
+    "by_level": {
+     "critical": 0,
+     "error": 2,
+     "warning": 1,
+     "info": 5,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [
+     {
+      "group_id": "711a283a2add",
+      "format": "app",
+      "level": "info",
+      "pattern": "request served",
+      "count": 1,
+      "first_seen": "2026-01-15T10:00:00Z",
+      "last_seen": "2026-01-15T10:00:00Z",
+      "file_count": 1,
+      "files": [
+       "app.log"
+      ],
+      "example": {
+       "file": "app.log",
+       "line": 1,
+       "text": "2026-01-15T10:00:00.000Z INFO api request served"
+      }
+     },
+     {
+      "group_id": "35a3d0133eef",
+      "format": "app",
+      "level": "warning",
+      "pattern": "request slow",
+      "count": 1,
+      "first_seen": "2026-01-15T10:00:01Z",
+      "last_seen": "2026-01-15T10:00:01Z",
+      "file_count": 1,
+      "files": [
+       "app.log"
+      ],
+      "example": {
+       "file": "app.log",
+       "line": 2,
+       "text": "2026-01-15T10:00:01.000Z WARN api request slow"
+      }
+     },
+     {
+      "group_id": "cfd38712538e",
+      "format": "app",
+      "level": "error",
+      "pattern": "request failed",
+      "count": 1,
+      "first_seen": "2026-01-15T10:00:02Z",
+      "last_seen": "2026-01-15T10:00:02Z",
+      "file_count": 1,
+      "files": [
+       "app.log"
+      ],
+      "example": {
+       "file": "app.log",
+       "line": 3,
+       "text": "2026-01-15T10:00:02.000Z ERROR api request failed"
+      }
+     },
+     {
+      "group_id": "98828c5461b8",
+      "format": "app",
+      "level": "info",
+      "pattern": "step one",
+      "count": 1,
+      "first_seen": "2026-01-15T10:05:00Z",
+      "last_seen": "2026-01-15T10:05:00Z",
+      "file_count": 1,
+      "files": [
+       "walk/good.log"
+      ],
+      "example": {
+       "file": "walk/good.log",
+       "line": 1,
+       "text": "2026-01-15T10:05:00.000Z INFO walker step one"
+      }
+     },
+     {
+      "group_id": "4f9445350b85",
+      "format": "app",
+      "level": "error",
+      "pattern": "step two",
+      "count": 1,
+      "first_seen": "2026-01-15T10:05:01Z",
+      "last_seen": "2026-01-15T10:05:01Z",
+      "file_count": 1,
+      "files": [
+       "walk/good.log"
+      ],
+      "example": {
+       "file": "walk/good.log",
+       "line": 2,
+       "text": "2026-01-15T10:05:01.000Z ERROR walker step two"
+      }
+     },
+     {
+      "group_id": "e54c57ce54c5",
+      "format": "app",
+      "level": "info",
+      "pattern": "still readable",
+      "count": 1,
+      "first_seen": "2026-01-15T10:06:00Z",
+      "last_seen": "2026-01-15T10:06:00Z",
+      "file_count": 1,
+      "files": [
+       "broken/good.log"
+      ],
+      "example": {
+       "file": "broken/good.log",
+       "line": 1,
+       "text": "2026-01-15T10:06:00.000Z INFO mender still readable"
+      }
+     },
+     {
+      "group_id": "5931c9306cf6",
+      "format": "app",
+      "level": "info",
+      "pattern": "short line",
+      "count": 1,
+      "first_seen": "2026-01-15T10:09:00Z",
+      "last_seen": "2026-01-15T10:09:00Z",
+      "file_count": 1,
+      "files": [
+       "long/long.log"
+      ],
+      "example": {
+       "file": "long/long.log",
+       "line": 1,
+       "text": "2026-01-15T10:09:00.000Z INFO stretcher short line"
+      }
+     },
+     {
+      "group_id": "e77669e58d00",
+      "format": "app",
+      "level": "info",
+      "pattern": "long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "count": 1,
+      "first_seen": "2026-01-15T10:09:01Z",
+      "last_seen": "2026-01-15T10:09:01Z",
+      "file_count": 1,
+      "files": [
+       "long/long.log"
+      ],
+      "example": {
+       "file": "long/long.log",
+       "line": 2,
+       "text": "2026-01-15T10:09:01.000Z INFO stretcher long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+     }
+    ],
+    "total_groups": 8,
+    "shown": 8,
+    "note": ""
+   }
+  },
+  {
+   "id": "summarize-hostile-walk",
+   "tool": "summarize_logs",
+   "root": "hostile",
+   "args": {
+    "path": "walk",
+    "min_level": "any"
+   },
+   "result": {
+    "path": "walk",
+    "since": null,
+    "until": null,
+    "min_level": "any",
+    "files_scanned": 1,
+    "skipped": [
+     {
+      "path": "walk/sub-link",
+      "reason": "symlink"
+     },
+     {
+      "path": "walk/zz-link.log",
+      "reason": "symlink"
+     }
+    ],
+    "lines_scanned": 2,
+    "lines_in_window": 2,
+    "first_seen": "2026-01-15T10:05:00Z",
+    "last_seen": "2026-01-15T10:05:01Z",
+    "by_level": {
+     "critical": 0,
+     "error": 1,
+     "warning": 0,
+     "info": 1,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [
+     {
+      "group_id": "98828c5461b8",
+      "format": "app",
+      "level": "info",
+      "pattern": "step one",
+      "count": 1,
+      "first_seen": "2026-01-15T10:05:00Z",
+      "last_seen": "2026-01-15T10:05:00Z",
+      "file_count": 1,
+      "files": [
+       "walk/good.log"
+      ],
+      "example": {
+       "file": "walk/good.log",
+       "line": 1,
+       "text": "2026-01-15T10:05:00.000Z INFO walker step one"
+      }
+     },
+     {
+      "group_id": "4f9445350b85",
+      "format": "app",
+      "level": "error",
+      "pattern": "step two",
+      "count": 1,
+      "first_seen": "2026-01-15T10:05:01Z",
+      "last_seen": "2026-01-15T10:05:01Z",
+      "file_count": 1,
+      "files": [
+       "walk/good.log"
+      ],
+      "example": {
+       "file": "walk/good.log",
+       "line": 2,
+       "text": "2026-01-15T10:05:01.000Z ERROR walker step two"
+      }
+     }
+    ],
+    "total_groups": 2,
+    "shown": 2,
+    "note": ""
+   }
+  },
+  {
+   "id": "summarize-hostile-broken",
+   "tool": "summarize_logs",
+   "root": "hostile",
+   "args": {
+    "path": "broken",
+    "min_level": "any"
+   },
+   "result": {
+    "path": "broken",
+    "since": null,
+    "until": null,
+    "min_level": "any",
+    "files_scanned": 1,
+    "skipped": [
+     {
+      "path": "broken/bad.log.gz",
+      "reason": "unreadable"
+     }
+    ],
+    "lines_scanned": 1,
+    "lines_in_window": 1,
+    "first_seen": "2026-01-15T10:06:00Z",
+    "last_seen": "2026-01-15T10:06:00Z",
+    "by_level": {
+     "critical": 0,
+     "error": 0,
+     "warning": 0,
+     "info": 1,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [
+     {
+      "group_id": "e54c57ce54c5",
+      "format": "app",
+      "level": "info",
+      "pattern": "still readable",
+      "count": 1,
+      "first_seen": "2026-01-15T10:06:00Z",
+      "last_seen": "2026-01-15T10:06:00Z",
+      "file_count": 1,
+      "files": [
+       "broken/good.log"
+      ],
+      "example": {
+       "file": "broken/good.log",
+       "line": 1,
+       "text": "2026-01-15T10:06:00.000Z INFO mender still readable"
+      }
+     }
+    ],
+    "total_groups": 1,
+    "shown": 1,
+    "note": ""
+   }
+  },
+  {
+   "id": "summarize-hostile-cut",
+   "tool": "summarize_logs",
+   "root": "hostile",
+   "args": {
+    "path": "cut",
+    "min_level": "any"
+   },
+   "result": {
+    "path": "cut",
+    "since": null,
+    "until": null,
+    "min_level": "any",
+    "files_scanned": 0,
+    "skipped": [
+     {
+      "path": "cut/cut.log.gz",
+      "reason": "unreadable"
+     }
+    ],
+    "lines_scanned": 0,
+    "lines_in_window": 0,
+    "first_seen": null,
+    "last_seen": null,
+    "by_level": {
+     "critical": 0,
+     "error": 0,
+     "warning": 0,
+     "info": 0,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [],
+    "total_groups": 0,
+    "shown": 0,
+    "note": ""
+   }
+  },
+  {
+   "id": "summarize-hostile-big",
+   "tool": "summarize_logs",
+   "root": "hostile",
+   "args": {
+    "path": "big",
+    "min_level": "any"
+   },
+   "result": {
+    "path": "big",
+    "since": null,
+    "until": null,
+    "min_level": "any",
+    "files_scanned": 0,
+    "skipped": [
+     {
+      "path": "big/huge.log.gz",
+      "reason": "too large"
+     },
+     {
+      "path": "big/sparse.log",
+      "reason": "too large"
+     }
+    ],
+    "lines_scanned": 0,
+    "lines_in_window": 0,
+    "first_seen": null,
+    "last_seen": null,
+    "by_level": {
+     "critical": 0,
+     "error": 0,
+     "warning": 0,
+     "info": 0,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [],
+    "total_groups": 0,
+    "shown": 0,
+    "note": ""
+   }
+  },
+  {
+   "id": "summarize-hostile-long",
+   "tool": "summarize_logs",
+   "root": "hostile",
+   "args": {
+    "path": "long",
+    "min_level": "any"
+   },
+   "result": {
+    "path": "long",
+    "since": null,
+    "until": null,
+    "min_level": "any",
+    "files_scanned": 1,
+    "skipped": [],
+    "lines_scanned": 2,
+    "lines_in_window": 2,
+    "first_seen": "2026-01-15T10:09:00Z",
+    "last_seen": "2026-01-15T10:09:01Z",
+    "by_level": {
+     "critical": 0,
+     "error": 0,
+     "warning": 0,
+     "info": 2,
+     "debug": 0,
+     "unknown": 0
+    },
+    "groups": [
+     {
+      "group_id": "5931c9306cf6",
+      "format": "app",
+      "level": "info",
+      "pattern": "short line",
+      "count": 1,
+      "first_seen": "2026-01-15T10:09:00Z",
+      "last_seen": "2026-01-15T10:09:00Z",
+      "file_count": 1,
+      "files": [
+       "long/long.log"
+      ],
+      "example": {
+       "file": "long/long.log",
+       "line": 1,
+       "text": "2026-01-15T10:09:00.000Z INFO stretcher short line"
+      }
+     },
+     {
+      "group_id": "e77669e58d00",
+      "format": "app",
+      "level": "info",
+      "pattern": "long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "count": 1,
+      "first_seen": "2026-01-15T10:09:01Z",
+      "last_seen": "2026-01-15T10:09:01Z",
+      "file_count": 1,
+      "files": [
+       "long/long.log"
+      ],
+      "example": {
+       "file": "long/long.log",
+       "line": 2,
+       "text": "2026-01-15T10:09:01.000Z INFO stretcher long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      }
+     }
+    ],
+    "total_groups": 2,
+    "shown": 2,
+    "note": ""
+   }
+  },
+  {
+   "id": "search-hostile-walk",
+   "tool": "search_logs",
+   "root": "hostile",
+   "args": {
+    "path": "walk",
+    "pattern": "."
+   },
+   "result": {
+    "path": "walk",
+    "pattern": ".",
+    "matches": [
+     {
+      "file": "walk/good.log",
+      "line": 1,
+      "time": "2026-01-15T10:05:00Z",
+      "level": "info",
+      "text": "2026-01-15T10:05:00.000Z INFO walker step one"
+     },
+     {
+      "file": "walk/good.log",
+      "line": 2,
+      "time": "2026-01-15T10:05:01Z",
+      "level": "error",
+      "text": "2026-01-15T10:05:01.000Z ERROR walker step two"
+     }
+    ],
+    "total": 2,
+    "shown": 2,
+    "note": ""
+   }
+  },
+  {
+   "id": "search-hostile-cut",
+   "tool": "search_logs",
+   "root": "hostile",
+   "args": {
+    "path": "cut",
+    "pattern": "."
+   },
+   "result": {
+    "path": "cut",
+    "pattern": ".",
+    "matches": [],
+    "total": 0,
+    "shown": 0,
+    "note": ""
+   }
+  },
+  {
+   "id": "search-hostile-long-tail",
+   "tool": "search_logs",
+   "root": "hostile",
+   "args": {
+    "path": "long",
+    "pattern": "TAIL"
+   },
+   "result": {
+    "path": "long",
+    "pattern": "TAIL",
+    "matches": [],
+    "total": 0,
+    "shown": 0,
+    "note": ""
+   }
+  },
+  {
+   "id": "search-hostile-long-head",
+   "tool": "search_logs",
+   "root": "hostile",
+   "args": {
+    "path": "long",
+    "pattern": "stretcher"
+   },
+   "result": {
+    "path": "long",
+    "pattern": "stretcher",
+    "matches": [
+     {
+      "file": "long/long.log",
+      "line": 1,
+      "time": "2026-01-15T10:09:00Z",
+      "level": "info",
+      "text": "2026-01-15T10:09:00.000Z INFO stretcher short line"
+     },
+     {
+      "file": "long/long.log",
+      "line": 2,
+      "time": "2026-01-15T10:09:01Z",
+      "level": "info",
+      "text": "2026-01-15T10:09:01.000Z INFO stretcher long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     }
+    ],
+    "total": 2,
+    "shown": 2,
+    "note": ""
+   }
+  },
+  {
+   "id": "list-hostile-walk",
+   "tool": "list_logs",
+   "root": "hostile",
+   "args": {
+    "path": "walk"
+   },
+   "result": {
+    "path": "walk",
+    "files": [
+     {
+      "path": "walk/good.log",
+      "size_bytes": 93,
+      "compressed": false,
+      "format": "app"
+     }
+    ],
+    "total": 1,
+    "shown": 1,
+    "note": ""
+   }
+  },
+  {
+   "id": "list-hostile-broken",
+   "tool": "list_logs",
+   "root": "hostile",
+   "args": {
+    "path": "broken"
+   },
+   "result": {
+    "path": "broken",
+    "files": [
+     {
+      "path": "broken/bad.log.gz",
+      "size_bytes": 22,
+      "compressed": true,
+      "format": "unknown"
+     },
+     {
+      "path": "broken/good.log",
+      "size_bytes": 52,
+      "compressed": false,
+      "format": "app"
+     }
+    ],
+    "total": 2,
+    "shown": 2,
+    "note": ""
+   }
+  },
+  {
+   "id": "list-hostile-big",
+   "tool": "list_logs",
+   "root": "hostile",
+   "args": {
+    "path": "big"
+   },
+   "compare": "path and format",
+   "result": {
+    "path": "big",
+    "files": [
+     {
+      "path": "big/huge.log.gz",
+      "size_bytes": 227906,
+      "compressed": true,
+      "format": "app"
+     },
+     {
+      "path": "big/sparse.log",
+      "size_bytes": 67108865,
+      "compressed": false,
+      "format": "app"
+     }
+    ],
+    "total": 2,
+    "shown": 2,
+    "note": ""
+   }
+  },
+  {
+   "id": "read-hostile-long-line",
+   "tool": "read_lines",
+   "root": "hostile",
+   "args": {
+    "path": "long/long.log",
+    "line": 2,
+    "before": 0,
+    "after": 0
+   },
+   "result": {
+    "file": "long/long.log",
+    "start": 2,
+    "end": 2,
+    "total_lines": 2,
+    "lines": [
+     {
+      "line": 2,
+      "text": "2026-01-15T10:09:01.000Z INFO stretcher long line xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     }
+    ]
+   }
+  }
+ ],
+ "formats_document": {
+  "formats": [
+   {
+    "name": "app",
+    "levels": [
+     "critical",
+     "error",
+     "warning",
+     "info",
+     "debug",
+     "unknown"
+    ],
+    "timestamp": "yyyy-mm-ddTHH:MM:SS.fffZ",
+    "example": "2026-01-15T10:04:12.345Z ERROR billing charge failed order=A-1042 amount=19.99 client=192.0.2.10 trace=3f2a9c1e7b6d4a58"
+   },
+   {
+    "name": "nginx-access",
+    "levels": [
+     "error",
+     "warning",
+     "info",
+     "unknown"
+    ],
+    "timestamp": "dd/Mon/yyyy:HH:MM:SS ±zzzz",
+    "example": "192.0.2.10 - - [15/Jan/2026:10:04:12 +0100] \"GET /catalog/items?page=2 HTTP/1.1\" 502 157 \"-\" \"curl/8.5.0\""
+   },
+   {
+    "name": "nginx-error",
+    "levels": [
+     "critical",
+     "error",
+     "warning",
+     "info",
+     "debug",
+     "unknown"
+    ],
+    "timestamp": "yyyy/mm/dd HH:MM:SS",
+    "example": "2026/01/15 10:04:12 [crit] 41#41: *7 open() \"/var/www/myhost/cache/a1.tmp\" failed (13: Permission denied), client: 192.0.2.10, server: myhost"
+   },
+   {
+    "name": "php-fpm",
+    "levels": [
+     "critical",
+     "error",
+     "warning",
+     "info",
+     "debug",
+     "unknown"
+    ],
+    "timestamp": "dd-Mon-yyyy HH:MM:SS",
+    "example": "[15-Jan-2026 10:04:12] WARNING: [pool www] child 38 exited on signal 9 (SIGKILL) after 12.5 seconds from start"
+   },
+   {
+    "name": "postgres",
+    "levels": [
+     "critical",
+     "error",
+     "warning",
+     "info",
+     "debug",
+     "unknown"
+    ],
+    "timestamp": "yyyy-mm-dd HH:MM:SS.fff UTC",
+    "example": "2026-01-15 10:04:12.345 UTC [2231] ERROR:  duplicate key value violates unique constraint \"users_email_key\""
+   },
+   {
+    "name": "redis",
+    "levels": [
+     "warning",
+     "info",
+     "debug",
+     "unknown"
+    ],
+    "timestamp": "dd Mon yyyy HH:MM:SS.fff",
+    "example": "1:M 15 Jan 2026 10:04:12.345 # WARNING overcommit_memory is set to 0! Background save may fail under low memory condition."
+   },
+   {
+    "name": "syslog",
+    "levels": [
+     "unknown"
+    ],
+    "timestamp": "yyyy-mm-ddTHH:MM:SS.fff±hh:mm",
+    "example": "2026-01-15T10:04:12.345678+02:00 myhost sshd[812]: Accepted publickey for deploy from 192.0.2.10 port 50122 ssh2"
+   },
+   {
+    "name": "pytest",
+    "levels": [
+     "error",
+     "info",
+     "unknown"
+    ],
+    "timestamp": "run header",
+    "example": "=== run 2026-01-15T10:00:00Z ==="
+   },
+   {
+    "name": "gotest",
+    "levels": [
+     "error",
+     "info",
+     "debug",
+     "unknown"
+    ],
+    "timestamp": "run header",
+    "example": "=== run 2026-01-15T10:00:00Z ==="
+   }
+  ]
+ }
+}

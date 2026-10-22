@@ -1,0 +1,166 @@
+{
+ "about": "Per-file facts for your meaning tests, computed from docs/log-formats.md on the raw files of s3_logs. For each file: its format; its line count; how many lines carry their own time and how many borrow one; the first and last own times; the level counts over the whole file; for test logs, the run headers and how many are distinct; for a dated archive, how many lines carry a time from before the date in its name; a window between two of its own times (since inclusive, until exclusive) with the lines stamped exactly at each end and the lines inside it; and the first three message groups at min_level any. Each gz_vs_plain file gives the same summary as its decompressed copy, apart from the path.",
+ "files": [
+  {
+   "path": "pods/edge-7c1a/archive/nginx-access-2026-09-03.log.gz",
+   "format": "nginx-access",
+   "lines": 31706,
+   "lines_with_own_time": 31706,
+   "untimed_lines": 0,
+   "first_seen": "2026-09-02T01:31:12Z",
+   "last_seen": "2026-09-03T23:33:36Z",
+   "by_level": {
+    "critical": 0,
+    "error": 2,
+    "warning": 967,
+    "info": 30737,
+    "debug": 0,
+    "unknown": 0
+   },
+   "lines_before_name_date": 15852,
+   "window": {
+    "since": "2026-09-02T13:50:24Z",
+    "until": "2026-09-03T02:00:00Z",
+    "lines_at_since": 1,
+    "lines_at_until": 18,
+    "lines_in_window": 7911
+   },
+   "top_groups": [
+    {
+     "group_id": "cb25a69b3868",
+     "count": 7852
+    },
+    {
+     "group_id": "d8e1727359c7",
+     "count": 7214
+    },
+    {
+     "group_id": "8b0a8bbc7ba8",
+     "count": 4442
+    }
+   ]
+  },
+  {
+   "path": "pods/ci-py-1/archive/pytest-2026-09-05.log.gz",
+   "format": "pytest",
+   "lines": 13664,
+   "lines_with_own_time": 8,
+   "untimed_lines": 13656,
+   "first_seen": "2026-09-05T02:00:00Z",
+   "last_seen": "2026-09-05T20:00:00Z",
+   "by_level": {
+    "critical": 0,
+    "error": 704,
+    "warning": 0,
+    "info": 8056,
+    "debug": 0,
+    "unknown": 4904
+   },
+   "run_headers": 8,
+   "distinct_run_headers": 4,
+   "lines_before_name_date": 0,
+   "window": {
+    "since": "2026-09-05T08:00:00Z",
+    "until": "2026-09-05T14:00:00Z",
+    "lines_at_since": 2,
+    "lines_at_until": 2,
+    "lines_in_window": 3444
+   },
+   "top_groups": [
+    {
+     "group_id": "7ec992928bdf",
+     "count": 234
+    },
+    {
+     "group_id": "06fb3fc5abee",
+     "count": 212
+    },
+    {
+     "group_id": "2e29a6af67b1",
+     "count": 192
+    }
+   ]
+  },
+  {
+   "path": "vms/cache-01/archive/redis-2026-08-30.log.gz",
+   "format": "redis",
+   "lines": 52,
+   "lines_with_own_time": 51,
+   "untimed_lines": 1,
+   "first_seen": "2026-08-29T23:59:59Z",
+   "last_seen": "2026-08-30T22:36:16Z",
+   "by_level": {
+    "critical": 0,
+    "error": 0,
+    "warning": 6,
+    "info": 45,
+    "debug": 0,
+    "unknown": 1
+   },
+   "lines_before_name_date": 4,
+   "window": {
+    "since": "2026-08-30T08:01:49Z",
+    "until": "2026-08-30T14:08:57Z",
+    "lines_at_since": 2,
+    "lines_at_until": 1,
+    "lines_in_window": 11
+   },
+   "top_groups": [
+    {
+     "group_id": "8f81b1a29504",
+     "count": 8
+    },
+    {
+     "group_id": "7bfaf9d86945",
+     "count": 7
+    },
+    {
+     "group_id": "7fc36b9b823a",
+     "count": 7
+    }
+   ]
+  },
+  {
+   "path": "pods/provisioner-2/archive/app-2026-08-30.log.gz",
+   "format": "app",
+   "lines": 4330,
+   "lines_with_own_time": 4330,
+   "untimed_lines": 0,
+   "first_seen": "2026-08-30T00:16:18Z",
+   "last_seen": "2026-08-30T21:48:49Z",
+   "by_level": {
+    "critical": 0,
+    "error": 0,
+    "warning": 929,
+    "info": 3401,
+    "debug": 0,
+    "unknown": 0
+   },
+   "lines_before_name_date": 0,
+   "window": {
+    "since": "2026-08-30T08:00:53Z",
+    "until": "2026-08-30T14:01:04Z",
+    "lines_at_since": 8,
+    "lines_at_until": 5,
+    "lines_in_window": 1270
+   },
+   "top_groups": [
+    {
+     "group_id": "698b8fc1884a",
+     "count": 1124
+    },
+    {
+     "group_id": "8857dd279d4d",
+     "count": 661
+    },
+    {
+     "group_id": "ad95ab52468d",
+     "count": 589
+    }
+   ]
+  }
+ ],
+ "gz_vs_plain": [
+  "pods/provisioner-2/archive/app-2026-08-30.log.gz"
+ ]
+}

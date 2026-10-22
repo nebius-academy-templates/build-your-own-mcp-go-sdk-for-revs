@@ -1,0 +1,60 @@
+2026-09-10 01:40:23.232 UTC [16] LOG:  received smart shutdown request
+2026-09-10 01:40:23.520 UTC [16] LOG:  background worker "logical replication launcher" (PID 26) exited with exit code 1
+2026-09-10 01:40:25.680 UTC [21] LOG:  checkpoint complete: wrote 680 buffers (4.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=16.059 s, sync=0.008 s, total=16.077 s; sync files=42, longest=0.007 s, average=0.001 s; distance=4524 kB, estimate=4524 kB; lsn=0/A7C4BB8, redo lsn=0/A7C4B28
+2026-09-10 01:40:25.680 UTC [21] LOG:  shutting down
+2026-09-10 01:40:25.824 UTC [21] LOG:  checkpoint starting: shutdown immediate
+2026-09-10 01:40:25.968 UTC [21] LOG:  checkpoint complete: wrote 0 buffers (0.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.003 s; sync files=0, longest=0.000 s, average=0.000 s; distance=0 kB, estimate=4071 kB; lsn=0/A7C4C30, redo lsn=0/A7C4C30
+2026-09-10 01:40:26.256 UTC [16] LOG:  database system is shut down
+2026-09-10 01:50:39.264 UTC [17] LOG:  starting PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+2026-09-10 01:50:39.264 UTC [17] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-09-10 01:50:39.264 UTC [17] LOG:  listening on IPv6 address "::", port 5432
+2026-09-10 01:50:39.840 UTC [17] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-09-10 01:50:40.272 UTC [24] LOG:  database system was shut down at 2026-09-11 14:13:06 UTC
+2026-09-10 01:50:40.992 UTC [17] LOG:  database system is ready to accept connections
+2026-09-10 09:33:20.736 UTC [37] LOG:  process 37 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1001.466 ms
+2026-09-10 09:33:20.736 UTC [37] DETAIL:  Process holding the lock: 683. Wait queue: 37.
+2026-09-10 09:33:20.736 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 09:38:08.592 UTC [37] ERROR:  canceling statement due to lock timeout
+2026-09-10 09:38:08.592 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 09:40:41.664 UTC [37] LOG:  process 37 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1004.298 ms
+2026-09-10 09:40:41.664 UTC [37] DETAIL:  Process holding the lock: 683. Wait queue: 37.
+2026-09-10 09:40:41.664 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 09:45:29.088 UTC [37] ERROR:  canceling statement due to lock timeout
+2026-09-10 09:45:29.088 UTC [37] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 13:50:53.952 UTC [22] LOG:  checkpoint starting: time
+2026-09-10 15:33:17.856 UTC [36] LOG:  process 36 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1000.471 ms
+2026-09-10 15:33:17.856 UTC [36] DETAIL:  Process holding the lock: 1206. Wait queue: 36.
+2026-09-10 15:33:17.856 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 15:38:06.576 UTC [36] ERROR:  canceling statement due to lock timeout
+2026-09-10 15:38:06.576 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 15:40:39.360 UTC [36] LOG:  process 36 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1006.096 ms
+2026-09-10 15:40:39.360 UTC [36] DETAIL:  Process holding the lock: 1206. Wait queue: 36.
+2026-09-10 15:40:39.360 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 15:45:26.784 UTC [36] ERROR:  canceling statement due to lock timeout
+2026-09-10 15:45:26.784 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 17:09:58.464 UTC [22] LOG:  checkpoint complete: wrote 814 buffers (5.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=82.915 s, sync=0.027 s, total=82.949 s; sync files=43, longest=0.003 s, average=0.001 s; distance=6372 kB, estimate=6372 kB; lsn=0/B1F5B88, redo lsn=0/ADFDFB8
+2026-09-10 21:33:20.736 UTC [36] LOG:  process 36 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1001.422 ms at character 13
+2026-09-10 21:33:20.736 UTC [36] DETAIL:  Process holding the lock: 1719. Wait queue: 36.
+2026-09-10 21:33:20.736 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 21:38:09.024 UTC [36] ERROR:  canceling statement due to lock timeout at character 13
+2026-09-10 21:38:09.024 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 21:40:41.520 UTC [36] LOG:  process 36 still waiting for RowExclusiveLock on relation 16505 of database 16387 after 1004.785 ms at character 13
+2026-09-10 21:40:41.520 UTC [36] DETAIL:  Process holding the lock: 1719. Wait queue: 36.
+2026-09-10 21:40:41.520 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 21:45:29.088 UTC [36] ERROR:  canceling statement due to lock timeout at character 13
+2026-09-10 21:45:29.088 UTC [36] STATEMENT:  INSERT INTO invoices (account_id, currency, total_cents) VALUES ($1, $2, $3) RETURNING id, status
+2026-09-10 23:47:33.072 UTC [17] LOG:  received smart shutdown request
+2026-09-10 23:47:33.360 UTC [17] LOG:  background worker "logical replication launcher" (PID 27) exited with exit code 1
+2026-09-10 23:47:33.504 UTC [22] LOG:  shutting down
+2026-09-10 23:47:33.504 UTC [22] LOG:  checkpoint starting: shutdown immediate
+2026-09-10 23:47:38.112 UTC [22] LOG:  checkpoint complete: wrote 822 buffers (5.0%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.021 s, sync=0.009 s, total=0.033 s; sync files=44, longest=0.007 s, average=0.001 s; distance=5832 kB, estimate=6318 kB; lsn=0/B3B0048, redo lsn=0/B3B0048
+2026-09-10 23:47:38.544 UTC [17] LOG:  database system is shut down
+2026-09-11 00:14:40.272 UTC [15] LOG:  starting PostgreSQL 17.11 (Debian 17.11-1.pgdg12+2) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit
+2026-09-11 00:14:40.272 UTC [15] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-09-11 00:14:40.272 UTC [15] LOG:  listening on IPv6 address "::", port 5432
+2026-09-11 00:14:40.704 UTC [15] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-09-11 00:14:40.992 UTC [22] LOG:  database system was shut down at 2026-09-11 14:22:19 UTC
+2026-09-11 00:14:41.424 UTC [15] LOG:  database system is ready to accept connections
+2026-09-11 12:14:55.536 UTC [20] LOG:  checkpoint starting: time
+2026-09-11 16:01:57.504 UTC [20] LOG:  checkpoint complete: wrote 928 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=94.586 s, sync=0.007 s, total=94.598 s; sync files=49, longest=0.004 s, average=0.001 s; distance=6954 kB, estimate=6954 kB; lsn=0/BEEF160, redo lsn=0/BA7A870
+2026-09-12 00:16:37.488 UTC [20] LOG:  checkpoint starting: time
