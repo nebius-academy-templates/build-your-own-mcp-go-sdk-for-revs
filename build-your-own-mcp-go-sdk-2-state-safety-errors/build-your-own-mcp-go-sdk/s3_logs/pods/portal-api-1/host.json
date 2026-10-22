@@ -1,0 +1,5 @@
+{
+  "service": "portal-api",
+  "env": "prod",
+  "team": "platform"
+}
